@@ -21,6 +21,8 @@ gem "devise"
 gem "ffi", "~> 1.16.3"
 gem "dartsass-sprockets"
 gem "bootstrap"
+gem "jquery-rails"
+gem "webpacker"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
