@@ -19,3 +19,5 @@
 //= require popper
 //= require bootstrap
 //= require_tree .
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap'
