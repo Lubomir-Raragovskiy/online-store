@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 gem "devise"
-gem "ffi", "~> 1.16.3"
+gem "ffi", "~> 1.17.0"
 gem "dartsass-sprockets"
 gem "bootstrap"
 gem "jquery-rails"
