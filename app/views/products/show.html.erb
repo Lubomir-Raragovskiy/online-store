@@ -1,0 +1,7 @@
+<h1><%= @product.name %></h1>
+
+<p><strong>Опис:</strong> <%= @product.description %></p>
+<p><strong>Ціна:</strong> <%= number_to_currency(@product.price, unit: "грн", format: "%n %u") %></p>
+<p><strong>В наявності:</strong> <%= @product.stock %> шт.</p>
+
+<%= link_to 'Назад до каталогу', products_path, class: "btn btn-secondary" %>

@@ -1,2 +1,26 @@
-<h1>Cart#show</h1>
-<p>Find me in app/views/cart/show.html.erb</p>
+<h1>Ваш кошик</h1>
+
+<% if @cart_products.present? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Назва</th>
+        <th>Опис</th>
+        <th>Ціна</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart_products.each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= truncate(product.description, length: 50) %></td>
+          <td><%= number_to_currency(product.price, unit: "грн", format: "%n %u") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'Оформити замовлення', new_order_path, class: "btn btn-success" %>
+<% else %>
+  <p>Ваш кошик порожній.</p>
+  <%= link_to 'Перейти до каталогу', products_path, class: "btn btn-primary" %>
+<% end %>
