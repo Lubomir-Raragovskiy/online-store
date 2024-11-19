@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.2].define(version: 2024_11_16_074732) do
+=======
+ActiveRecord::Schema[7.2].define(version: 2024_11_19_190327) do
+>>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
   create_table "brand_products", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.integer "product_id", null: false
@@ -87,6 +91,30 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_16_074732) do
     t.index ["brand_id"], name: "index_models_on_brand_id"
   end
 
+<<<<<<< HEAD
+=======
+  create_table "order_items", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "product_id", null: false
+    t.integer "quantity"
+    t.decimal "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+>>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
   create_table "part_characteristics", force: :cascade do |t|
     t.integer "part_id", null: false
     t.integer "characteristic_id", null: false
@@ -114,6 +142,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_16_074732) do
     t.index ["part_id"], name: "index_products_on_part_id"
   end
 
+<<<<<<< HEAD
+=======
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+>>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
   create_table "years", force: :cascade do |t|
     t.integer "year"
     t.datetime "created_at", null: false
@@ -133,6 +176,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_16_074732) do
   add_foreign_key "model_products", "models"
   add_foreign_key "model_products", "products"
   add_foreign_key "models", "brands"
+<<<<<<< HEAD
+=======
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "users"
+>>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
   add_foreign_key "part_characteristics", "characteristics"
   add_foreign_key "part_characteristics", "parts"
   add_foreign_key "products", "parts"

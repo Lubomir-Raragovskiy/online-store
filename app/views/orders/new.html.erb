@@ -1,0 +1,27 @@
+<h1>Оформлення замовлення</h1>
+
+<%= form_with model: @order, local: true do |f| %>
+  <% unless user_signed_in? %>
+    <div class="form-group">
+      <%= f.label :name, "Ім'я" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= f.label :email, "Email" %>
+      <%= f.email_field :email, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= f.label :phone, "Телефон" %>
+      <%= f.text_field :phone, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <h2>Ваші товари</h2>
+  <ul>
+    <% @cart_products.each do |product| %>
+      <li><%= product.name %> - <%= number_to_currency(product.price, unit: "грн") %></li>
+    <% end %>
+  </ul>
+
+  <%= f.submit "Оформити замовлення", class: "btn btn-success" %>
+<% end %>

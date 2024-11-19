@@ -1,10 +1,24 @@
 Rails.application.routes.draw do
+<<<<<<< HEAD
   root "pages#home"
 
   resources :products, only: [ :index, :show ]
 
   get "cart", to: "cart#show"
   post "cart/:product_id", to: "cart#create"
+=======
+  get "orders/new"
+  get "orders/create"
+  get "orders/show"
+  devise_for :users
+  root "pages#home"
+
+  resources :products, only: [ :index, :show ]
+  resources :orders, only: [ :new, :create, :show ]
+
+  get "cart", to: "cart#show"
+  post "cart/:product_id", to: "cart#create", as: "add_to_cart"
+>>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
   get "contact", to: "pages#contact"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
