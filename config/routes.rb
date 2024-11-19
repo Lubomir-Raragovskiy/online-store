@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   get "cart", to: "cart#show"
   post "cart/:product_id", to: "cart#create", as: "add_to_cart"
+  post "update_cart", to: "cart#update", as: "update_cart"
+  delete "remove_from_cart/:product_id", to: "cart#remove", as: "remove_from_cart"
+
   get "contact", to: "pages#contact"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
