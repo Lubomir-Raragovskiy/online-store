@@ -1,7 +1,4 @@
 class OrdersController < ApplicationController
-<<<<<<< HEAD
-  def order
-=======
   def new
     @order = Order.new
     @cart_products = Product.find(session[:cart] || [])
@@ -34,6 +31,5 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(:name, :email, :phone)
->>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
   end
 end

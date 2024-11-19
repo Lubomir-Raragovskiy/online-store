@@ -6,11 +6,7 @@
       <h2><%= link_to product.name, product_path(product) %></h2>
       <p><%= truncate(product.description, length: 100) %></p>
       <p><strong>Ціна:</strong> <%= number_to_currency(product.price, unit: "грн", format: "%n %u") %></p>
-<<<<<<< HEAD
-      <%= link_to 'Додати в кошик', cart_path(product_id: product.id), method: :post, class: "btn btn-primary" %>
-=======
       <%= button_to 'Додати в кошик', add_to_cart_path(product_id: product.id), method: :post, class: "btn btn-primary" %>
->>>>>>> 828d59f (Added cart and order pages, created users and orders tables in db)
     </div>
   <% end %>
 </div>
