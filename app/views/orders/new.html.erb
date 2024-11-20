@@ -1,27 +1,36 @@
 <h1>Оформлення замовлення</h1>
 
-<%= form_with model: @order, local: true do |f| %>
-  <% unless user_signed_in? %>
-    <div class="form-group">
-      <%= f.label :name, "Ім'я" %>
-      <%= f.text_field :name, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :email, "Email" %>
-      <%= f.email_field :email, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :phone, "Телефон" %>
-      <%= f.text_field :phone, class: "form-control" %>
-    </div>
+<%= form_for @order do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+
+  <%= f.label :phone %>
+  <%= f.text_field :phone %>
+
+  <h3>Адреса доставки</h3>
+  <%= f.fields_for :address do |address_form| %>
+    <!-- Спочатку область -->
+    <%= address_form.label :region, "Область" %>
+    <%= address_form.text_field :region, id: 'order_address_region' %>
+
+    <!-- Потім місто -->
+    <%= address_form.label :city, "Місто" %>
+    <%= address_form.text_field :city, id: 'order_address_city' %>
+
+    <!-- Потім вулиця (будинок та квартира) -->
+    <%= address_form.label :line1, "Вулиця" %>
+    <%= address_form.text_field :line1, id: 'order_address_line1' %>
+
+    <%= address_form.label :line2, "Будинок/Квартира" %>
+    <%= address_form.text_field :line2 %>
+
+    <!-- Поштовий індекс -->
+    <%= address_form.label :postal_code, "Поштовий індекс" %>
+    <%= address_form.text_field :postal_code, id: 'order_address_postal_code' %>
   <% end %>
 
-  <h2>Ваші товари</h2>
-  <ul>
-    <% @cart_products.each do |product| %>
-      <li><%= product.name %> - <%= number_to_currency(product.price, unit: "грн") %></li>
-    <% end %>
-  </ul>
-
-  <%= f.submit "Оформити замовлення", class: "btn btn-success" %>
+  <%= f.submit "Оформити замовлення" %>
 <% end %>

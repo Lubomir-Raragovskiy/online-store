@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
+  get "addresses/new"
+  get "addresses/create"
   devise_for :users
   root "pages#home"
 
   resources :products, only: [ :index, :show ]
   resources :orders, only: [ :new, :create, :show ]
+
+  resources :orders do
+    resource :address, only: [ :new, :create ]
+  end
 
   get "cart", to: "cart#show"
   post "cart/:product_id", to: "cart#create", as: "add_to_cart"

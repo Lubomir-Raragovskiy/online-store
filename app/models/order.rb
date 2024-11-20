@@ -4,4 +4,5 @@ class Order < ApplicationRecord
   has_many :products, through: :order_items
 
   validates :name, :email, :phone, presence: true, unless: -> { user.present? }
+  belongs_to :address
 end

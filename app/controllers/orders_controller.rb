@@ -2,14 +2,14 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
     @cart_products = Product.find(session[:cart] || [])
+    @order.build_address # Створюємо асоціацію адреси
   end
 
   def create
     @order = current_user ? current_user.orders.build(order_params) : Order.new(order_params)
 
     # Додаємо товари з кошика до замовлення
-    cart_items = session[:cart] || []
-    cart_items.each do |product_id|
+    (session[:cart] || []).each do |product_id|
       product = Product.find(product_id)
       @order.order_items.build(product: product, quantity: 1, price: product.price)
     end
@@ -30,6 +30,6 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:name, :email, :phone)
+    params.require(:order).permit(:name, :email, :phone, address_attributes: [:line1, :line2, :city, :district, :region, :postal_code])
   end
 end
