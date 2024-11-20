@@ -5,3 +5,39 @@
 <p><strong>В наявності:</strong> <%= @product.stock %> шт.</p>
 
 <%= link_to 'Назад до каталогу', products_path, class: "btn btn-secondary" %>
+
+<!-- Відгуки -->
+<div class="reviews">
+  <h2>Відгуки</h2>
+  <% @product.reviews.each do |review| %>
+    <div class="review">
+      <strong><%= review.user.email %>:</strong>
+      <p>Оцінка: <%= review.rating %>/5</p>
+      <p><%= review.content %></p>
+      <% if review.user == current_user %>
+        <%= button_to 'Видалити', product_review_path(@product, review), method: :delete, class: "btn btn-danger", data: { confirm: "Ви впевнені?" } %>
+      <% end %>
+    </div>
+    <hr>
+  <% end %>
+</div>
+
+<!-- Додавання нового відгуку -->
+<% if user_signed_in? %>
+  <div class="new-review">
+    <h2>Залишити відгук</h2>
+    <%= form_with(model: [@product, @product.reviews.new], local: true) do |f| %>
+      <div class="form-group">
+        <%= f.label :rating, "Оцінка:" %>
+        <%= f.select :rating, options_for_select(1..5), {}, class: "form-select" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :content, "Коментар:" %>
+        <%= f.text_area :content, class: "form-control" %>
+      </div>
+      <%= f.submit "Додати відгук", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+<% else %>
+  <p>Ви повинні <%= link_to "увійти", new_user_session_path %>, щоб залишити відгук.</p>
+<% end %>

@@ -8,6 +8,7 @@ class Product < ApplicationRecord
   has_many :models, through: :model_products
   has_many :engine_products
   has_many :engines, through: :engine_products
+  has_many :reviews, dependent: :destroy
 
   def self.ransackable_attributes(_auth_object = nil)
     [ "name", "part_id", "brands.id", "models.id", "engines.id" ]
