@@ -18,6 +18,12 @@
 //= require jquery3
 //= require popper
 //= require bootstrap
+//= require select2
 //= require_tree .
+import '../stylesheets/application.scss';
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap'
+
+$(document).on('turbolinks:load', function() {
+    $('.select2').select2();
+  });

@@ -8,4 +8,12 @@ class Product < ApplicationRecord
   has_many :models, through: :model_products
   has_many :engine_products
   has_many :engines, through: :engine_products
+
+  def self.ransackable_attributes(_auth_object = nil)
+    [ "name", "part_id", "brands.id", "models.id", "engines.id" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[brands models engines]
+  end
 end

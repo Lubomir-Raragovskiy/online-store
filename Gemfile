@@ -23,6 +23,8 @@ gem "dartsass-sprockets"
 gem "bootstrap"
 gem "jquery-rails"
 gem "webpacker"
+gem "ransack"
+gem "select2-rails"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
