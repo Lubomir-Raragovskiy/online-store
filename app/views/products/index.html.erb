@@ -67,6 +67,13 @@
   <% end %>
 </div>
 
+<!-- Кнопка для додавання нового товару (для адміністраторів) -->
+<% if current_user&.admin? %>
+  <div class="mt-4">
+    <%= link_to 'Додати новий товар', new_admin_product_path, class: "btn btn-primary" %>
+  </div>
+<% end %>
+
 <!-- Список товарів -->
 <div class="product-list row mt-5">
   <% if @products.present? %>
@@ -79,6 +86,14 @@
             <p class="card-text"><strong>Ціна:</strong> <%= number_to_currency(product.price, unit: "грн", format: "%n %u") %></p>
             <%= button_to 'Додати в кошик', add_to_cart_path(product_id: product.id), method: :post, class: "btn btn-primary w-100" %>
           </div>
+
+          <!-- Кнопки редагування та видалення товару (для адміністраторів) -->
+          <% if current_user&.admin? %>
+            <div class="card-footer d-flex justify-content-between">
+              <%= link_to 'Редагувати', edit_admin_product_path(product), class: "btn btn-warning" %>
+              <%= button_to 'Видалити', admin_product_path(product), method: :delete, data: { confirm: 'Ви впевнені, що хочете видалити цей товар?' }, class: "btn btn-danger" %>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>

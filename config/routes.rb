@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   root "pages#home"
 
   resources :products, only: [ :index, :show ]
+  resources :products do
+    resources :reviews, only: [ :create, :destroy ]
+  end
   resources :orders, only: [ :new, :create, :show ]
 
   resources :orders do
@@ -16,6 +19,7 @@ Rails.application.routes.draw do
     resources :dashboard, only: [ :index ]
     resources :users, only: [ :index, :destroy ]
     resources :orders, only: [ :index ]
+    resources :products, only: [ :new, :create, :edit, :update, :destroy ]
   end
 
   get "cart", to: "cart#show"

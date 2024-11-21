@@ -1,31 +1,12 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :authorize_admin!, only: [ :new, :create, :edit, :update, :destroy ]
-
-  private
-
-  def authorize_admin!
-    redirect_to root_path, alert: "Access denied!" unless current_user&.admin?
-  end
   def index
     @q = Product.ransack(params[:q])
-
     @parts = Part.all
     @brands = Brand.all
     @engines = Engine.all
+    @models = params[:brand_id].present? ? Model.where(brand_id: params[:brand_id]) : []
 
-    @models = if params[:brand_id].present?
-                Model.where(brand_id: params[:brand_id])
-    else
-                []
-    end
-
-    @characteristics = if params[:part_id].present?
-                         Characteristic.joins(:part_characteristics)
-                                       .where(part_characteristics: { part_id: params[:part_id] })
-    else
-                         []
-    end
+    @characteristics = params[:part_id].present? ? Characteristic.joins(:part_characteristics).where(part_characteristics: { part_id: params[:part_id] }) : []
 
     @products = @q.result(distinct: true)
 
@@ -45,12 +26,14 @@ class ProductsController < ApplicationController
       @products = @products.where(part_id: params[:part_id])
     end
 
-    if params[:characteristic_id].present?
-      @products = @products.joins(:characteristics).where(characteristics: { id: params[:characteristic_id] })
+    if params[:engine_id].present?
+      @products = @products.where(engine_id: params[:engine_id])
+    end
+
+    if params[:car_id].present?
+      @products = @products.where(car_id: params[:car_id])
     end
   end
-
-
 
 
   def show
