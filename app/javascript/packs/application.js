@@ -19,14 +19,14 @@
 //= require popper
 //= require bootstrap
 //= require select2
+//= require autonumeric
 //= require_tree .
 import '../stylesheets/application.scss';
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap'
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap';
+import 'jquery';
+import 'select2';
 
 $(document).on('turbolinks:load', function() {
     $('.select2').select2();
-  });
-
-  
-  
+});

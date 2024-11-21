@@ -12,25 +12,86 @@
 
   <h3>Адреса доставки</h3>
   <%= f.fields_for :address do |address_form| %>
-    <!-- Спочатку область -->
     <%= address_form.label :region, "Область" %>
     <%= address_form.text_field :region, id: 'order_address_region' %>
 
-    <!-- Потім місто -->
     <%= address_form.label :city, "Місто" %>
     <%= address_form.text_field :city, id: 'order_address_city' %>
 
-    <!-- Потім вулиця (будинок та квартира) -->
     <%= address_form.label :line1, "Вулиця" %>
     <%= address_form.text_field :line1, id: 'order_address_line1' %>
 
     <%= address_form.label :line2, "Будинок/Квартира" %>
     <%= address_form.text_field :line2 %>
 
-    <!-- Поштовий індекс -->
     <%= address_form.label :postal_code, "Поштовий індекс" %>
     <%= address_form.text_field :postal_code, id: 'order_address_postal_code' %>
   <% end %>
 
-  <%= f.submit "Оформити замовлення" %>
+  <h3>Спосіб оплати</h3>
+<%= f.label :payment_method, "Виберіть спосіб оплати" %><br>
+<%= f.select :payment_method, 
+    [['При отриманні', 'cash'], ['Оплата карткою', 'card']], 
+    { selected: @order.payment_method }, 
+    { class: 'form-select', onchange: 'this.form.submit()' } %>
+
+<% if @order.payment_method == 'card' %>
+  <h4>Дані карти</h4>
+  
+  <%= form_for @order, url: process_payment_orders_path, method: :post do |f| %>
+    <label for="card_number">Номер карти</label>
+    <%= f.text_field :card_number, 
+        maxlength: 16,
+        placeholder: '1234567890123456', 
+        class: 'form-control', 
+        id: 'order_card_number', 
+        pattern: '^\d{16}$', 
+        title: 'Введіть номер карти у форматі 1234567890123456',
+        required: true,
+        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+
+    <div class="form-group row">
+  <label for="card_expiry_month" class="col-sm-2 col-form-label">Місяць (MM)</label>
+  <div class="col-sm-4">
+    <%= f.text_field :card_expiry_month, 
+        placeholder: 'MM', 
+        maxlength: 2, 
+        class: 'form-control', 
+        id: 'card_expiry_month', 
+        pattern: '^(0[1-9]|1[0-2])$', 
+        title: 'Введіть місяць у форматі MM',
+        required: true, 
+        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+  </div>
+
+  <label for="card_expiry_year" class="col-sm-2 col-form-label">Рік (YY)</label>
+  <div class="col-sm-4">
+    <%= f.text_field :card_expiry_year, 
+        placeholder: 'YY', 
+        maxlength: 2, 
+        class: 'form-control', 
+        id: 'card_expiry_year', 
+        pattern: '^([0-9]{2})$', 
+        title: 'Введіть рік у форматі YY',
+        required: true, 
+        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+  </div>
+</div>
+
+    <label for="card_cvc">CVC</label>
+    <%= f.password_field :card_cvc, 
+        maxlength: 3, 
+        class: 'form-control', 
+        id: 'order_card_cvc', 
+        pattern: '^\d{3}$', 
+        title: 'Введіть 3-значний CVC код',
+        required: true,
+        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+    
+  <% end %>
+<% end %>
+
+
+<%= f.submit "Оформити замовлення" %>
+
 <% end %>

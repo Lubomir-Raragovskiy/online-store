@@ -25,7 +25,6 @@ gem "jquery-rails"
 gem "webpacker"
 gem "ransack"
 gem "select2-rails"
-gem 'geocoder'
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -70,3 +69,5 @@ group :test do
 end
 
 gem "cssbundling-rails", "~> 1.4"
+
+gem "stripe", "~> 13.2"

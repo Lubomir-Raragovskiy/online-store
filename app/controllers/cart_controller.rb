@@ -34,7 +34,7 @@ class CartController < ApplicationController
       # Якщо потрібно видалити зайві продукти
       quantity_to_remove = -quantity_to_add
       quantity_to_remove.times do
-        session[:cart].delete_at(session[:cart].rindex(product.id))
+        session[:cart].delete_at(session[:cart].rindex(product_id))
       end
     end
 

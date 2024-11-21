@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :orders do
     resource :address, only: [ :new, :create ]
+    post "process_payment", on: :collection
   end
 
   get "cart", to: "cart#show"
