@@ -1,4 +1,12 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :authorize_admin!, only: [ :new, :create, :edit, :update, :destroy ]
+
+  private
+
+  def authorize_admin!
+    redirect_to root_path, alert: "Access denied!" unless current_user&.admin?
+  end
   def index
     @q = Product.ransack(params[:q])
 

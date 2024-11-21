@@ -12,6 +12,12 @@ Rails.application.routes.draw do
     post "process_payment", on: :collection
   end
 
+  namespace :admin do
+    resources :dashboard, only: [ :index ]
+    resources :users, only: [ :index, :destroy ]
+    resources :orders, only: [ :index ]
+  end
+
   get "cart", to: "cart#show"
   post "cart/:product_id", to: "cart#create", as: "add_to_cart"
   post "update_cart", to: "cart#update", as: "update_cart"
