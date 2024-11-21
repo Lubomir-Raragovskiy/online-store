@@ -1,6 +1,9 @@
 <h1>Manage Users</h1>
 
-<table>
+<!-- Кнопка для створення нового користувача -->
+<%= link_to 'Create New User', new_admin_user_path, class: 'btn btn-primary mb-3' %>
+
+<table class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
@@ -10,15 +13,25 @@
     </tr>
   </thead>
   <tbody>
+  <% if @users.present? %>
     <% @users.each do |user| %>
       <tr>
         <td><%= user.id %></td>
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td>
-          <%= link_to 'Delete', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <%= link_to 'Show', admin_user_path(user), class: 'btn btn-info btn-sm' %>
+          <%= link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-warning btn-sm' %>
+          <%= button_to 'Delete', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
         </td>
       </tr>
     <% end %>
+  <% else %>
+    <tr>
+      <td colspan="4" class="text-center">No users found.</td>
+    </tr>
+  <% end %>
+</tbody>
+
   </tbody>
 </table>
