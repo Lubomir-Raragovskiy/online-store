@@ -14,7 +14,11 @@ class OrdersController < ApplicationController
 
     if @order.save
       session[:cart] = [] # Очищуємо кошик
-      redirect_to @order, notice: "Замовлення успішно оформлено!"
+
+      # Надсилаємо підтвердження замовлення
+      OrderMailer.order_confirmation(@order).deliver_now
+
+      redirect_to @order, notice: "Замовлення успішно оформлено! Перевірте вашу електронну пошту."
     else
       render :new
     end

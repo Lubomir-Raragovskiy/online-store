@@ -1,0 +1,10 @@
+<h1>Дякуємо за Ваше замовлення, <%= @order.name %>!</h1>
+<p>Ваше замовлення №<%= @order.id %> успішно створено.</p>
+<p>Ми скоро зв'яжемося з Вами для підтвердження.</p>
+<p>Деталі замовлення:</p>
+<ul>
+  <% @order.order_items.each do |item| %>
+    <li><%= item.product.name %> - <%= item.quantity %> шт. за <%= number_to_currency(item.price) %></li>
+  <% end %>
+</ul>
+<p>Сума: <%= number_to_currency(@order.total_price) %></p>
