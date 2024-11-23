@@ -39,25 +39,6 @@
               { class: "form-select select2" } %>
       </div>
     </div>
-
-    <div class="row mt-3">
-      <!-- Фільтр за деталями -->
-      <div class="col-md-6">
-        <label for="part_id" class="form-label">Деталь:</label>
-        <%= select_tag :part_id, 
-              options_from_collection_for_select(@parts, :id, :name, params[:part_id]), 
-              include_blank: "Виберіть деталь", 
-              class: 'form-select select2' %>
-      </div>
-
-      <!-- Фільтр за характеристиками -->
-      <div class="col-md-6">
-        <label for="characteristic_ids" class="form-label">Характеристики:</label>
-        <%= select_tag :characteristic_ids, 
-              options_from_collection_for_select(@characteristics, :id, :name, params[:characteristic_ids]), 
-              multiple: true, 
-              class: 'form-select select2' %>
-      </div>
     </div>
 
     <!-- Кнопка застосування фільтрів -->
@@ -66,6 +47,37 @@
     </div>
   <% end %>
 </div>
+<div class="sidebar-filters">
+   <%= form_with(url: products_path, method: :get, local: true, html: { id: 'filters-form', class: "filters-form" }) do |f| %>
+  <!-- Фільтр за деталлю -->
+  <div class="form-group">
+    <%= f.label :part_id, "Деталь:", class: "form-label" %>
+    <%= f.select :part_id, 
+          options_from_collection_for_select(@parts, :id, :name, params[:part_id]), 
+          { include_blank: "Виберіть деталь" }, 
+          { class: "form-select select2", onchange: "this.form.submit();" } %>
+  </div>
+
+  <!-- Фільтр за характеристиками -->
+  <% if @selected_part %>
+    <% @characteristics.each do |characteristic| %>
+      <div class="form-group">
+        <%= f.label "characteristics[#{characteristic.id}]", characteristic.name, class: "form-label" %>
+        <%= f.select "characteristics[#{characteristic.id}]", 
+              options_for_select([[characteristic.value, characteristic.id]], params.dig(:characteristics, characteristic.id.to_s)), 
+              { include_blank: "Виберіть #{characteristic.name.downcase}" }, 
+              { class: "form-select select2" } %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="actions mt-4">
+    <%= f.submit 'Застосувати фільтри', class: "btn btn-success w-100" %>
+  </div>
+<% end %>
+
+</div>
+
 
 <!-- Кнопка для додавання нового товару (для адміністраторів) -->
 <% if current_user&.admin? %>

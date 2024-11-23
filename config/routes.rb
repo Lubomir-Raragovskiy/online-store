@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :products, only: [ :index, :show ]
   resources :products do
     resources :reviews, only: [ :create, :destroy ]
+    get :characteristics, on: :collection
   end
   resources :orders, only: [ :new, :create, :show ]
 

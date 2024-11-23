@@ -9,6 +9,7 @@ class Product < ApplicationRecord
   has_many :engine_products
   has_many :engines, through: :engine_products
   has_many :reviews, dependent: :destroy
+  has_many :characteristics, through: :part
   has_one_attached :image
 
   def self.ransackable_attributes(_auth_object = nil)
