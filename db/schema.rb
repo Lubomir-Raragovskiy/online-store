@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_21_202301) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_23_224651) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -67,28 +67,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_21_202301) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "car_products", force: :cascade do |t|
-    t.integer "car_id", null: false
-    t.integer "product_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["car_id"], name: "index_car_products_on_car_id"
-    t.index ["product_id"], name: "index_car_products_on_product_id"
-  end
-
-  create_table "cars", force: :cascade do |t|
-    t.integer "brand_id", null: false
-    t.integer "model_id", null: false
-    t.integer "year_id", null: false
-    t.integer "engine_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["brand_id"], name: "index_cars_on_brand_id"
-    t.index ["engine_id"], name: "index_cars_on_engine_id"
-    t.index ["model_id"], name: "index_cars_on_model_id"
-    t.index ["year_id"], name: "index_cars_on_year_id"
-  end
-
   create_table "characteristics", force: :cascade do |t|
     t.string "name", null: false
     t.string "value"
@@ -118,6 +96,33 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_21_202301) do
     t.datetime "updated_at", null: false
     t.index ["model_id"], name: "index_model_products_on_model_id"
     t.index ["product_id"], name: "index_model_products_on_product_id"
+  end
+
+  create_table "model_year_engines", force: :cascade do |t|
+    t.integer "model_year_id", null: false
+    t.integer "engine_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["engine_id"], name: "index_model_year_engines_on_engine_id"
+    t.index ["model_year_id"], name: "index_model_year_engines_on_model_year_id"
+  end
+
+  create_table "model_year_products", force: :cascade do |t|
+    t.integer "model_year_id", null: false
+    t.integer "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["model_year_id"], name: "index_model_year_products_on_model_year_id"
+    t.index ["product_id"], name: "index_model_year_products_on_product_id"
+  end
+
+  create_table "model_years", force: :cascade do |t|
+    t.integer "model_id", null: false
+    t.integer "year_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["model_id"], name: "index_model_years_on_model_id"
+    t.index ["year_id"], name: "index_model_years_on_year_id"
   end
 
   create_table "models", force: :cascade do |t|
@@ -215,16 +220,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_21_202301) do
   add_foreign_key "addresses", "orders"
   add_foreign_key "brand_products", "brands"
   add_foreign_key "brand_products", "products"
-  add_foreign_key "car_products", "cars"
-  add_foreign_key "car_products", "products"
-  add_foreign_key "cars", "brands"
-  add_foreign_key "cars", "engines"
-  add_foreign_key "cars", "models"
-  add_foreign_key "cars", "years"
   add_foreign_key "engine_products", "engines"
   add_foreign_key "engine_products", "products"
   add_foreign_key "model_products", "models"
   add_foreign_key "model_products", "products"
+  add_foreign_key "model_year_engines", "engines"
+  add_foreign_key "model_year_engines", "model_years"
+  add_foreign_key "model_year_products", "model_years"
+  add_foreign_key "model_year_products", "products"
+  add_foreign_key "model_years", "models"
+  add_foreign_key "model_years", "years"
   add_foreign_key "models", "brands"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"

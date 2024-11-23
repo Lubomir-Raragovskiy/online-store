@@ -11,6 +11,8 @@ class Product < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_many :characteristics, through: :part
   has_one_attached :image
+  has_many :model_year_products
+  has_many :model_years, through: :model_year_products
 
   def self.ransackable_attributes(_auth_object = nil)
     [ "name", "part_id", "brands.id", "models.id", "engines.id" ]
