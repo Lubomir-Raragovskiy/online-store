@@ -1,12 +1,15 @@
 class OrdersController < ApplicationController
+  before_action :load_regions_and_related_data, only: [ :new, :create ]
+
   def new
-    @order = Order.new(order_params)
-    @order.build_address if @order.address.nil? # Створюємо адресу, якщо її немає
+    @order = Order.new
+    @order.build_address
   end
 
   def create
     @order = current_user ? current_user.orders.build(order_params) : Order.new(order_params)
 
+    # Додаємо продукти з кошика в замовлення
     (session[:cart] || []).each do |product_id|
       product = Product.find(product_id)
       @order.order_items.build(product: product, quantity: 1, price: product.price)
@@ -24,23 +27,21 @@ class OrdersController < ApplicationController
     end
   end
 
-  def update
-    @order = Order.find(params[:id])
-
-    if @order.update(order_params)
-      redirect_to order_path(@order)
-    else
-      render :edit
-    end
-  end
-
   private
 
   def order_params
-    params.fetch(:order, {}).permit(
-      :name, :email, :phone, :payment_method,
-      :card_number, :card_expiry, :card_cvc,
-      address_attributes: [ :line1, :line2, :city, :district, :region, :postal_code ]
-    )
+    permitted = [ :name, :email, :phone, :payment_method,
+                 { address_attributes: [ :region, :district, :settlement, :post_office ] } ]
+    if params[:order][:payment_method] == "card"
+      permitted += [ :card_number, :card_expiry_month, :card_expiry_year, :card_cvc ]
+    end
+    params.require(:order).permit(permitted)
+  end
+
+  def load_regions_and_related_data
+    @regions = DelengineApiService.fetch_regions || []
+    @districts = params[:region_id].present? ? DelengineApiService.fetch_districts(params[:region_id]) : []
+    @settlements = params[:district_id].present? ? DelengineApiService.fetch_settlements(params[:district_id]) : []
+    @post_offices = params[:settlement_id].present? ? DelengineApiService.fetch_post_offices(params[:settlement_id]) : []
   end
 end

@@ -4,13 +4,15 @@ class Order < ApplicationRecord
   has_many :products, through: :order_items
 
   validates :name, :email, :phone, presence: true, unless: -> { user.present? }
-  belongs_to :address
+  has_one :address
 
   validates :payment_method, inclusion: { in: %w[card cash], message: "Недійсний спосіб оплати" }
 
   def total_price_cents
     order_items.sum { |item| item.price * item.quantity }
   end
+
+  accepts_nested_attributes_for :address
 
   attr_accessor :card_number, :card_expiry_month, :card_expiry_year, :card_cvc
 end

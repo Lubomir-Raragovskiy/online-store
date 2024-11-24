@@ -26,6 +26,7 @@ gem "webpacker"
 gem "ransack"
 gem "select2-rails"
 gem "kaminari"
+gem "httparty"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

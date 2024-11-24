@@ -1,97 +1,120 @@
-<h1>Оформлення замовлення</h1>
+<%= form_with model: @order, local: true do |f| %>
 
-<%= form_for @order do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+  <!-- Персональні дані -->
+  <div class="form-group">
+    <%= f.label :name, "Ім'я" %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
 
-  <%= f.label :email %>
-  <%= f.email_field :email %>
+  <div class="form-group">
+    <%= f.label :email, "Електронна пошта" %>
+    <%= f.email_field :email, class: "form-control" %>
+  </div>
 
-  <%= f.label :phone %>
-  <%= f.text_field :phone %>
+  <div class="form-group">
+    <%= f.label :phone, "Телефон" %>
+    <%= f.telephone_field :phone, class: "form-control" %>
+  </div>
 
-  <h3>Адреса доставки</h3>
-  <%= f.fields_for :address do |address_form| %>
-    <%= address_form.label :region, "Область" %>
-    <%= address_form.text_field :region, id: 'order_address_region' %>
+  <!-- Адреса -->
+  <fieldset>
+    <h3>Адреса</h3>
 
-    <%= address_form.label :city, "Місто" %>
-    <%= address_form.text_field :city, id: 'order_address_city' %>
+    <%= f.fields_for :address do |address_fields| %>
+      <div class="form-group">
+        <%= address_fields.label :region, "Область" %>
+        <%= address_fields.select :region,
+                                  options_for_select(@regions.map { |r| [r["name_uk"], r["uuid"]] }, selected: params.dig(:order, :address_attributes, :region)),
+                                  { prompt: "Виберіть область" },
+                                  { class: "form-select", onchange: "this.form.submit();" } %>
+      </div>
 
-    <%= address_form.label :line1, "Вулиця" %>
-    <%= address_form.text_field :line1, id: 'order_address_line1' %>
+      <div class="form-group">
+        <%= address_fields.label :district, "Район" %>
+        <%= address_fields.select :district,
+                                  options_for_select(@districts.map { |d| [d["name_uk"], d["uuid"]] }, selected: params.dig(:order, :address_attributes, :district)),
+                                  { prompt: "Виберіть район" },
+                                  { class: "form-select", onchange: "this.form.submit();" } %>
+      </div>
 
-    <%= address_form.label :line2, "Будинок/Квартира" %>
-    <%= address_form.text_field :line2 %>
+      <div class="form-group">
+        <%= address_fields.label :settlement, "Населений пункт" %>
+        <%= address_fields.select :settlement,
+                                  options_for_select(@settlements.map { |s| [s["name_uk"], s["uuid"]] }, selected: params.dig(:order, :address_attributes, :settlement)),
+                                  { prompt: "Виберіть населений пункт" },
+                                  { class: "form-select", onchange: "this.form.submit();" } %>
+      </div>
 
-    <%= address_form.label :postal_code, "Поштовий індекс" %>
-    <%= address_form.text_field :postal_code, id: 'order_address_postal_code' %>
-  <% end %>
+      <div class="form-group">
+        <%= address_fields.label :post_office, "Поштове відділення" %>
+        <%= address_fields.select :post_office,
+                                  options_for_select(@post_offices.map { |p| [p["name_uk"], p["uuid"]] }, selected: params.dig(:order, :address_attributes, :post_office)),
+                                  { prompt: "Виберіть поштове відділення" },
+                                  { class: "form-select" } %>
+      </div>
+    <% end %>
+  </fieldset>
 
+  <!-- Спосіб оплати -->
   <h3>Спосіб оплати</h3>
-<%= f.label :payment_method, "Виберіть спосіб оплати" %><br>
-<%= f.select :payment_method, 
-    [['При отриманні', 'cash'], ['Оплата карткою', 'card']], 
-    { selected: @order.payment_method }, 
-    { class: 'form-select', onchange: 'this.form.submit()' } %>
+  <div class="form-group">
+    <%= f.label :payment_method, "Виберіть спосіб оплати" %>
+    <%= f.select :payment_method, [['При отриманні', 'cash'], ['Оплата карткою', 'card']],
+                  { selected: @order.payment_method },
+                  { class: 'form-select', onchange: 'this.form.submit();' } %>
+  </div>
 
-<% if @order.payment_method == 'card' %>
-  <h4>Дані карти</h4>
-  
-  <%= form_for @order, url: process_payment_orders_path, method: :post do |f| %>
-    <label for="card_number">Номер карти</label>
-    <%= f.text_field :card_number, 
-        maxlength: 16,
-        placeholder: '1234567890123456', 
-        class: 'form-control', 
-        id: 'order_card_number', 
-        pattern: '^\d{16}$', 
-        title: 'Введіть номер карти у форматі 1234567890123456',
-        required: true,
-        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+  <% if @order.payment_method == 'card' %>
+    <!-- Поля для введення даних картки -->
+    <h4>Дані карти</h4>
+    <div class="form-group">
+      <%= f.label :card_number, "Номер карти" %>
+      <%= f.text_field :card_number,
+          class: 'form-control',
+          maxlength: 16,
+          placeholder: '1234567890123456',
+          pattern: '^\d{16}$',
+          title: 'Введіть номер карти у форматі 1234567890123456',
+          oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+    </div>
 
     <div class="form-group row">
-  <label for="card_expiry_month" class="col-sm-2 col-form-label">Місяць (MM)</label>
-  <div class="col-sm-4">
-    <%= f.text_field :card_expiry_month, 
-        placeholder: 'MM', 
-        maxlength: 2, 
-        class: 'form-control', 
-        id: 'card_expiry_month', 
-        pattern: '^(0[1-9]|1[0-2])$', 
-        title: 'Введіть місяць у форматі MM',
-        required: true, 
-        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
-  </div>
+      <div class="col-sm-6">
+        <%= f.label :card_expiry_month, "Місяць (MM)" %>
+        <%= f.text_field :card_expiry_month,
+            class: 'form-control',
+            maxlength: 2,
+            placeholder: 'MM',
+            pattern: '^(0[1-9]|1[0-2])$',
+            title: 'Введіть місяць у форматі MM',
+            oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+      </div>
 
-  <label for="card_expiry_year" class="col-sm-2 col-form-label">Рік (YY)</label>
-  <div class="col-sm-4">
-    <%= f.text_field :card_expiry_year, 
-        placeholder: 'YY', 
-        maxlength: 2, 
-        class: 'form-control', 
-        id: 'card_expiry_year', 
-        pattern: '^([0-9]{2})$', 
-        title: 'Введіть рік у форматі YY',
-        required: true, 
-        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
-  </div>
-</div>
+      <div class="col-sm-6">
+        <%= f.label :card_expiry_year, "Рік (YY)" %>
+        <%= f.text_field :card_expiry_year,
+            class: 'form-control',
+            maxlength: 2,
+            placeholder: 'YY',
+            pattern: '^\d{2}$',
+            title: 'Введіть рік у форматі YY',
+            oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+      </div>
+    </div>
 
-    <label for="card_cvc">CVC</label>
-    <%= f.password_field :card_cvc, 
-        maxlength: 3, 
-        class: 'form-control', 
-        id: 'order_card_cvc', 
-        pattern: '^\d{3}$', 
-        title: 'Введіть 3-значний CVC код',
-        required: true,
-        oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
-    
+    <div class="form-group">
+      <%= f.label :card_cvc, "CVC" %>
+      <%= f.password_field :card_cvc,
+          class: 'form-control',
+          maxlength: 3,
+          pattern: '^\d{3}$',
+          title: 'Введіть 3-значний CVC код',
+          oninput: "this.value = this.value.replace(/[^0-9]/g, '');" %>
+    </div>
   <% end %>
-<% end %>
 
-
-<%= f.submit "Оформити замовлення" %>
-
+  <!-- Кнопка надсилання -->
+  <div class="form-group">
+    <%= f.submit "Оформити замовлення", class: "btn btn-primary" %>
+  </div>
 <% end %>
