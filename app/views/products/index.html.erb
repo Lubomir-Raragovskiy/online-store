@@ -10,10 +10,10 @@
 
 <!-- Фільтри -->
 <div class="filters">
-  <%= form_with(url: products_path, method: :get, local: true, html: { id: 'filters-form', class: "filters-form" }) do |f| %>
+  <%= form_with(url: products_path, method: :get, local: true) do |f| %>
     <div class="row">
       <!-- Фільтр за маркою -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <%= f.label :brand_id, "Марка:", class: "form-label" %>
         <%= f.select :brand_id, 
               options_from_collection_for_select(@brands, :id, :name, params[:brand_id]), 
@@ -22,16 +22,25 @@
       </div>
 
       <!-- Фільтр за моделлю -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <%= f.label :model_id, "Модель:", class: "form-label" %>
         <%= f.select :model_id, 
               options_from_collection_for_select(@models, :id, :name, params[:model_id]), 
               { include_blank: "Виберіть модель" }, 
-              { class: "form-select select2" } %>
+              { class: "form-select select2", onchange: "this.form.submit();" } %>
+      </div>
+
+      <!-- Фільтр за роком -->
+      <div class="col-md-3">
+        <%= f.label :year_id, "Рік:", class: "form-label" %>
+        <%= f.select :year_id, 
+              options_from_collection_for_select(@years, :id, :year, params[:year_id]), 
+              { include_blank: "Виберіть рік" }, 
+              { class: "form-select select2", onchange: "this.form.submit();" } %>
       </div>
 
       <!-- Фільтр за двигуном -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <%= f.label :engine_id, "Двигун:", class: "form-label" %>
         <%= f.select :engine_id, 
               options_from_collection_for_select(@engines, :id, :name, params[:engine_id]), 
@@ -39,28 +48,29 @@
               { class: "form-select select2" } %>
       </div>
     </div>
-    </div>
 
-    <!-- Кнопка застосування фільтрів -->
+    <!-- Кнопка скидання фільтрів -->
     <div class="actions mt-4">
       <%= f.submit 'Застосувати фільтри', class: "btn btn-success w-100" %>
+      <%= link_to 'Скинути фільтри', products_path, class: "btn btn-secondary mt-2 w-100" %>
     </div>
   <% end %>
 </div>
 
+<!-- Sidebar з додатковими фільтрами -->
 <div class="catalog-page d-flex">
-<div class="sidebar-filters me-4">
-   <%= form_with(url: products_path, method: :get, local: true, html: { id: 'filters-form', class: "filters-form" }) do |f| %>
-  <!-- Фільтр за деталлю -->
-  <div class="form-group">
-    <%= f.label :part_id, "Деталь:", class: "form-label" %>
-    <%= f.select :part_id, 
-          options_from_collection_for_select(@parts, :id, :name, params[:part_id]), 
-          { include_blank: "Виберіть деталь" }, 
-          { class: "form-select select2", onchange: "this.form.submit();" } %>
-  </div>
+  <div class="sidebar-filters">
+    <%= form_with(url: products_path, method: :get, local: true, html: { id: 'filters-form', class: "filters-form" }) do |f| %>
+      <!-- Фільтр за деталлю -->
+      <div class="form-group">
+        <%= f.label :part_id, "Деталь:", class: "form-label" %>
+        <%= f.select :part_id, 
+              options_from_collection_for_select(@parts, :id, :name, params[:part_id]), 
+              { include_blank: "Виберіть деталь" }, 
+              { class: "form-select select2", onchange: "this.form.submit();" } %>
+      </div>
 
-  <!-- Фільтр за характеристиками -->
+     <!-- Фільтр за характеристиками -->
   <% if @selected_part %>
     <% @characteristics.each do |characteristic| %>
       <div class="form-group">
@@ -73,46 +83,53 @@
     <% end %>
   <% end %>
 
-  <div class="actions mt-4">
-    <%= f.submit 'Застосувати фільтри', class: "btn btn-success w-100" %>
-  </div>
-<% end %>
-
-</div>
-
-
-<!-- Кнопка для додавання нового товару (для адміністраторів) -->
-<% if current_user&.admin? %>
-  <div class="mt-4">
-    <%= link_to 'Додати новий товар', new_admin_product_path, class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<!-- Список товарів -->
-<div class="product-list row mt-5">
-  <% if @products.present? %>
-    <% @products.each do |product| %>
-      <div class="col-md-3">
-        <div class="product-item card mb-4">
-          <div class="card-body">
-            <h5 class="card-title"><%= link_to product.name, product_path(product), class: "text-decoration-none" %></h5>
-            <p class="card-text"><%= truncate(product.description, length: 100) %></p>
-            <p class="card-text"><strong>Ціна:</strong> <%= number_to_currency(product.price, unit: "грн", format: "%n %u") %></p>
-            <%= button_to 'Додати в кошик', add_to_cart_path(product_id: product.id), method: :post, class: "btn btn-primary w-100" %>
-          </div>
-
-          <!-- Кнопки редагування та видалення товару (для адміністраторів) -->
-          <% if current_user&.admin? %>
-            <div class="card-footer d-flex justify-content-between">
-              <%= link_to 'Редагувати', edit_admin_product_path(product), class: "btn btn-warning" %>
-              <%= button_to 'Видалити', admin_product_path(product), method: :delete, data: { confirm: 'Ви впевнені, що хочете видалити цей товар?' }, class: "btn btn-danger" %>
-            </div>
-          <% end %>
-        </div>
+      <div class="actions mt-4">
+        <%= f.submit 'Застосувати фільтри', class: "btn btn-success w-100" %>
       </div>
     <% end %>
-  <% else %>
-    <p class="text-center">Немає товарів, які відповідають заданим критеріям.</p>
+  </div>
+
+  <!-- Кнопка для додавання нового товару (для адміністраторів) -->
+  <% if current_user&.admin? %>
+    <div class="mt-4">
+      <%= link_to 'Додати новий товар', new_admin_product_path, class: "btn btn-primary" %>
+    </div>
   <% end %>
-</div>
+
+  <!-- Список товарів -->
+  <div class="product-list row mt-5">
+    <% if @products.present? %>
+      <% @products.each do |product| %>
+        <div class="col-md-3">
+          <div class="product-item card mb-4">
+            <div class="card-body">
+              <h5 class="card-title"><%= link_to product.name, product_path(product), class: "text-decoration-none" %></h5>
+              <p class="card-text"><%= truncate(product.description, length: 100) %></p>
+              <p class="card-text"><strong>Ціна:</strong> <%= number_to_currency(product.price, unit: "грн", format: "%n %u") %></p>
+              <% if product.stock > 0 %>
+                <%= button_to 'Додати в кошик', add_to_cart_path(product_id: product.id), method: :post, class: "btn btn-primary w-100" %>
+              <% else %>
+                <p class="text-danger text-center">Немає в наявності</p>
+              <% end %>
+            </div>
+
+            <!-- Кнопки редагування та видалення товару (для адміністраторів) -->
+            <% if current_user&.admin? %>
+              <div class="card-footer d-flex justify-content-between">
+                <%= link_to 'Редагувати', edit_admin_product_path(product), class: "btn btn-warning" %>
+                <%= button_to 'Видалити', admin_product_path(product), method: :delete, data: { confirm: 'Ви впевнені, що хочете видалити цей товар?' }, class: "btn btn-danger" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center">Немає товарів, які відповідають заданим критеріям.</p>
+    <% end %>
+  </div>
+
+  <!-- Пагінація -->
+  <div class="pagination mt-4">
+    <%= paginate @products %>
+  </div>
 </div>
