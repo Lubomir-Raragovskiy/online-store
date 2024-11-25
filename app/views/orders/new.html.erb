@@ -46,12 +46,12 @@
       </div>
 
       <div class="form-group">
-        <%= address_fields.label :post_office, "Поштове відділення" %>
-        <%= address_fields.select :post_office,
-                                  options_for_select(@post_offices.map { |p| [p["name_uk"], p["uuid"]] }, selected: params.dig(:order, :address_attributes, :post_office)),
-                                  { prompt: "Виберіть поштове відділення" },
-                                  { class: "form-select" } %>
-      </div>
+  <%= address_fields.label :post_office, "Поштове відділення" %>
+  <%= address_fields.select :post_office,
+                            options_for_select(@post_offices.map { |p| [p[:label], p[:uuid]] }, selected: params.dig(:order, :address_attributes, :post_office)),
+                            { prompt: "Виберіть поштове відділення" },
+                            { class: "form-select" } %>
+</div>
     <% end %>
   </fieldset>
 

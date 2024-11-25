@@ -40,8 +40,21 @@ class OrdersController < ApplicationController
 
   def load_regions_and_related_data
     @regions = DelengineApiService.fetch_regions || []
-    @districts = params[:region_id].present? ? DelengineApiService.fetch_districts(params[:region_id]) : []
-    @settlements = params[:district_id].present? ? DelengineApiService.fetch_settlements(params[:district_id]) : []
-    @post_offices = params[:settlement_id].present? ? DelengineApiService.fetch_post_offices(params[:settlement_id]) : []
+    region_id = params.dig(:order, :address_attributes, :region)
+    @districts = region_id.present? ? DelengineApiService.fetch_districts(region_id) : []
+    district_id = params.dig(:order, :address_attributes, :district)
+    @settlements = district_id.present? ? DelengineApiService.fetch_settlements(district_id) : []
+    settlement_id = params.dig(:order, :address_attributes, :settlement)
+    if settlement_id.present?
+      post_offices_data = DelengineApiService.fetch_post_offices(settlement_id)
+      @post_offices = post_offices_data.map do |post_office|
+        {
+          uuid: post_office["uuid"],
+          label: "#{post_office['company']['name_uk']} - #{post_office['department_type']['name_uk']} - #{post_office['address_uk']}"
+        }
+      end
+    else
+      @post_offices = []
+    end
   end
 end
