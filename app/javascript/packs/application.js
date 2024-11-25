@@ -26,6 +26,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap';
 import 'jquery';
 import 'select2';
+import "@hotwired/turbo-rails"
 
 $(document).on('turbolinks:load', function() {
     $('.select2').select2();

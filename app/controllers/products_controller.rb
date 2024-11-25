@@ -1,26 +1,7 @@
 class ProductsController < ApplicationController
   def index
     @q = Product.ransack(params[:q])
-    @parts = Part.all
-    @brands = Brand.all
-    @models = params[:brand_id].present? ? Model.where(brand_id: params[:brand_id]) : []
-    @years = params[:model_id].present? ? Year.joins(model_years: :model).where(models: { id: params[:model_id] }) : []
-    @engines = params[:year_id].present? ? Engine.joins(model_year_engines: { model_year: :year }).where(years: { id: params[:year_id] }) : []
-
-    @selected_part = params[:part_id].present? ? Part.find_by(id: params[:part_id]) : nil
-
-    if @selected_part
-      @characteristics = @selected_part.characteristics.distinct
-    else
-      @characteristics = []
-    end
-
-    if params[:characteristic_id].present?
-      @characteristic_values = Characteristic.where(id: params[:characteristic_id]).pluck(:value).uniq
-    else
-      @characteristic_values = []
-    end
-
+    load_dependencies
     @products = @q.result(distinct: true)
     @products = filter_products(@products)
     @products = @products.page(params[:page]).per(10)
@@ -31,6 +12,19 @@ class ProductsController < ApplicationController
   end
 
   private
+
+  def load_dependencies
+    @parts = Part.all
+    @brands = Brand.all
+    @models = params[:brand_id].present? ? Model.where(brand_id: params[:brand_id]) : []
+    @years = params[:model_id].present? ? Year.joins(model_years: :model).where(models: { id: params[:model_id] }) : []
+    @engines = params[:year_id].present? ? Engine.joins(model_year_engines: { model_year: :year }).where(years: { id: params[:year_id] }) : []
+
+    @selected_part = params[:part_id].present? ? Part.find_by(id: params[:part_id]) : nil
+
+    @characteristics = @selected_part ? @selected_part.characteristics.distinct : []
+    @characteristic_values = params[:characteristic_id].present? ? Characteristic.where(id: params[:characteristic_id]).pluck(:value).uniq : []
+  end
 
   def filter_products(products)
     # Фільтр за брендом

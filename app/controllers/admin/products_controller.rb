@@ -1,14 +1,14 @@
-# app/controllers/admin/products_controller.rb
-class Admin::ProductsController < ApplicationController
+class Admin::ProductsController < ProductsController
   before_action :authenticate_user!
   before_action :authorize_admin!
   before_action :set_product, only: [ :edit, :update, :destroy ]
-
+  before_action :load_dependencies, only: [ :new, :edit, :create, :update ]
 
   def new
     @product = Product.new
-    load_dependencies
   end
+
+  def edit; end
 
   def create
     @product = Product.new(product_params)
@@ -19,13 +19,9 @@ class Admin::ProductsController < ApplicationController
     end
   end
 
-  def edit
-    load_dependencies
-  end
-
   def update
     if @product.update(product_params)
-      redirect_to product_path(@product), notice: "Product was successfully updated."
+      redirect_to admin_product_path(@product), notice: "Product was successfully updated."
     else
       render :edit
     end
@@ -33,27 +29,30 @@ class Admin::ProductsController < ApplicationController
 
   def destroy
     @product.destroy
-    redirect_to products_path, notice: "Product was successfully deleted."
+    redirect_to admin_products_path, notice: "Product was successfully deleted."
   end
 
   private
+
+  def authorize_admin!
+    redirect_to root_path, alert: "Access denied!" unless current_user&.admin?
+  end
 
   def set_product
     @product = Product.find(params[:id])
   end
 
-  def load_dependencies
-    @parts = Part.all
-    @brands = Brand.all
-    @models = Model.all
-    @engines = Engine.all
-  end
-
   def product_params
-    params.require(:product).permit(:name, :description, :image, :price, :stock, :part_id)
-  end
-
-  def authorize_admin!
-    redirect_to root_path, alert: "Access denied!" unless current_user&.admin?
+    params.require(:product).permit(
+      :name,
+      :description,
+      :image,
+      :price,
+      :stock,
+      :part_id,
+      :brand_id,
+      :model_year_id,
+      :engine_id
+    )
   end
 end

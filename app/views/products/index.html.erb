@@ -45,17 +45,27 @@
         <%= f.select :engine_id, 
               options_from_collection_for_select(@engines, :id, :name, params[:engine_id]), 
               { include_blank: "Виберіть двигун" }, 
-              { class: "form-select select2" } %>
+              { class: "form-select select2", onchange: "this.form.submit();"} %>
       </div>
     </div>
 
+    <%= hidden_field_tag :part_id, params[:part_id] %>
+
     <!-- Кнопка скидання фільтрів -->
     <div class="actions mt-4">
-      <%= f.submit 'Застосувати фільтри', class: "btn btn-success w-100" %>
       <%= link_to 'Скинути фільтри', products_path, class: "btn btn-secondary mt-2 w-100" %>
     </div>
   <% end %>
 </div>
+
+<!-- Кнопка для додавання нового товару (для адміністраторів) -->
+  <% if current_user&.admin? %>
+    <div class="mt-4">
+      <%= link_to 'Додати новий товар', new_admin_product_path, class: "btn btn-primary mt-2 w-100" %>
+    </div>
+  <% end %>
+
+
 
 <!-- Sidebar з додатковими фільтрами -->
 <div class="catalog-page d-flex">
@@ -78,23 +88,19 @@
         <%= f.select "characteristics[#{characteristic.id}]", 
               options_for_select([[characteristic.value, characteristic.id]], params.dig(:characteristics, characteristic.id.to_s)), 
               { include_blank: "Виберіть #{characteristic.name.downcase}" }, 
-              { class: "form-select select2" } %>
+              { class: "form-select select2", onchange: "this.form.submit();" } %>
       </div>
     <% end %>
   <% end %>
 
-      <div class="actions mt-4">
-        <%= f.submit 'Застосувати фільтри', class: "btn btn-success w-100" %>
-      </div>
+
+  <%= hidden_field_tag :brand_id, params[:brand_id] %>
+  <%= hidden_field_tag :model_id, params[:model_id] %>
+  <%= hidden_field_tag :year_id, params[:year_id] %>
+  <%= hidden_field_tag :engine_id, params[:engine_id] %>
+
     <% end %>
   </div>
-
-  <!-- Кнопка для додавання нового товару (для адміністраторів) -->
-  <% if current_user&.admin? %>
-    <div class="mt-4">
-      <%= link_to 'Додати новий товар', new_admin_product_path, class: "btn btn-primary" %>
-    </div>
-  <% end %>
 
   <!-- Список товарів -->
   <div class="product-list row mt-5">
