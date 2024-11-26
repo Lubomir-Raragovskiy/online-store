@@ -1,6 +1,4 @@
-class Admin::ProductsController < ProductsController
-  before_action :authenticate_user!
-  before_action :authorize_admin!
+class Admin::ProductsController < Admin::SessionController
   before_action :set_product, only: [ :edit, :update, :destroy ]
   before_action :load_dependencies, only: [ :new, :edit, :create, :update ]
 
@@ -33,10 +31,6 @@ class Admin::ProductsController < ProductsController
   end
 
   private
-
-  def authorize_admin!
-    redirect_to root_path, alert: "Access denied!" unless current_user&.admin?
-  end
 
   def set_product
     @product = Product.find(params[:id])

@@ -21,6 +21,13 @@ Rails.application.routes.draw do
     resources :users, only: [ :index, :show, :new, :create, :edit, :update, :destroy  ]
     resources :orders, only: [ :index ]
     resources :products, only: [ :new, :create, :edit, :update, :destroy ]
+    resources :brands do
+      resources :models do
+        resources :model_years do
+          resources :engines
+        end
+      end
+    end
   end
 
   get "cart", to: "cart#show"
