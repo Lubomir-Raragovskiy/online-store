@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :products, only: [ :new, :create, :edit, :update, :destroy ]
     resources :brands, except: [ :show ]
     resources :models, except: [ :show ] do
-      resources :model_years do
+      resources :model_years, except: [ :show ] do
         resources :engines
       end
     end

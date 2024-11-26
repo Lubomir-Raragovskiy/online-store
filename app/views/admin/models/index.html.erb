@@ -16,6 +16,7 @@
           <tr>
             <td><%= model.name %></td>
             <td>
+              <%= link_to "Переглянути роки", admin_model_model_years_path(model), class: "btn btn-info" %>
               <%= link_to "Редагувати", edit_admin_model_path(model), class: "btn btn-secondary" %>
               <%= button_to "Видалити", admin_model_path(model), method: :delete, data: { confirm: "Ви впевнені?" }, class: "btn btn-danger" %>
             </td>

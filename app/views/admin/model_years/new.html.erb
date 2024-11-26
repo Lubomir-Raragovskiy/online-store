@@ -1,0 +1,5 @@
+<h1>Додати новий рік для моделі: <%= @model.name %></h1>
+
+<%= render 'form', model_year: @model_year %>
+
+<%= link_to "Назад", admin_model_model_years_path(@model), class: "btn btn-primary"  %>

@@ -1,0 +1,21 @@
+<%= form_with(model: [:admin, @model, model_year], local: true) do |form| %>
+  <% if model_year.errors.any? %>
+    <div class="errors">
+      <h2>Помилки:</h2>
+      <ul>
+        <% model_year.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :year_id, "Рік" %>
+    <%= form.collection_select :year_id, Year.all, :id, :year, prompt: "Оберіть рік" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Зберегти", class: "btn btn-primary" %>
+  </div>
+<% end %>
