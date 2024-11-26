@@ -1,0 +1,21 @@
+<%= form_with(model: [:admin, brand], local: true) do |form| %>
+  <% if brand.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(brand.errors.count, "помилка", "помилки", "помилок") %> не дозволяє зберегти цю марку:</h2>
+      <ul>
+        <% brand.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, "Назва", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Введіть назву марки" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Зберегти", class: "btn btn-primary" %>
+  </div>
+<% end %>

@@ -1,0 +1,23 @@
+<h1>Марки</h1>
+
+<%= link_to "Додати нову марку", new_admin_brand_path, class: "btn btn-primary" %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Назва</th>
+      <th>Дії</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @brands.each do |brand| %>
+      <tr>
+        <td><%= brand.name %></td>
+        <td>
+          <%= link_to "Редагувати", edit_admin_brand_path(brand), class: "btn btn-secondary" %>
+          <%= button_to "Видалити", admin_brand_path(brand), method: :delete, data: { confirm: "Ви впевнені, що хочете видалити цю марку?" }, class: "btn btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
