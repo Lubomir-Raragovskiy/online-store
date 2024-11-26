@@ -21,11 +21,10 @@ Rails.application.routes.draw do
     resources :users, only: [ :index, :show, :new, :create, :edit, :update, :destroy  ]
     resources :orders, only: [ :index ]
     resources :products, only: [ :new, :create, :edit, :update, :destroy ]
-    resources :brands, except: [ :show ] do
-      resources :models do
-        resources :model_years do
-          resources :engines
-        end
+    resources :brands, except: [ :show ]
+    resources :models, except: [ :show ] do
+      resources :model_years do
+        resources :engines
       end
     end
   end

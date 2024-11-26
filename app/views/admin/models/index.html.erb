@@ -1,0 +1,31 @@
+<h1>Моделі авто, згруповані за марками</h1>
+
+<% @brands.each do |brand| %>
+  <h2><%= brand.name %></h2>
+
+  <% if brand.models.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Назва моделі</th>
+          <th>Дії</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% brand.models.each do |model| %>
+          <tr>
+            <td><%= model.name %></td>
+            <td>
+              <%= link_to "Редагувати", edit_admin_model_path(model), class: "btn btn-secondary" %>
+              <%= button_to "Видалити", admin_model_path(model), method: :delete, data: { confirm: "Ви впевнені?" }, class: "btn btn-danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>У цієї марки немає моделей.</p>
+  <% end %>
+
+  <%= link_to "Додати модель для #{brand.name}", new_admin_model_path(brand), class: "btn btn-primary" %>
+<% end %>
