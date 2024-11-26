@@ -15,6 +15,9 @@
           <%= link_to "Редагувати", edit_admin_model_model_year_path(@model, model_year), class: "btn btn-primary"  %> |
           <%= button_to"Видалити", admin_model_model_year_path(@model, model_year), method: :delete, data: { confirm: "Ви впевнені?" }, class: "btn btn-primary"  %>
         </td>
+        <td>
+          <%= link_to "Переглянути двигуни", admin_model_model_year_engines_path(@model, model_year), class: "btn btn-info" %>
+        </td>
       </tr>
     <% end %>
   </tbody>

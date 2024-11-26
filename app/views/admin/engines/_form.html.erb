@@ -1,0 +1,21 @@
+<%= form_with(model: [:admin, @model, @model_year, @engine], local: true) do |form| %>
+  <% if @engine.errors.any? %>
+    <div class="errors">
+      <h2>Помилки:</h2>
+      <ul>
+        <% @engine.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :name, "Назва двигуна" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.submit "Зберегти", class: "btn btn-primary" %>
+  </div>
+<% end %>

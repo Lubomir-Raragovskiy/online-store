@@ -1,0 +1,5 @@
+<h1>Додати двигун для моделі <%= @model.name %> (<%= @model_year.year.year %>)</h1>
+
+<%= render 'form', engine: @engine %>
+
+<%= link_to "Назад до списку двигунів", admin_model_model_year_engines_path(@model, @model_year), class: "btn btn-secondary mt-3" %>

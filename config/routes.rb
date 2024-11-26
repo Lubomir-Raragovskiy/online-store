@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     resources :brands, except: [ :show ]
     resources :models, except: [ :show ] do
       resources :model_years, except: [ :show ] do
-        resources :engines
+        resources :engines, except: [ :show ]
       end
     end
   end
