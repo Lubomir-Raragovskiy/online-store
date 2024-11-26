@@ -1,4 +1,4 @@
-<%= form_with model: @product, url: admin_product_path, local: true, html: { multipart: true } do |f| %>
+<%= form_with model: [:admin, @product], local: true, html: { multipart: true } do |f| %>
   <% if @product.errors.any? %>
     <div class="alert alert-danger">
       <h4>Є помилки у вашій формі:</h4>
@@ -17,7 +17,7 @@
 
   <div class="mb-3">
     <%= f.label :price, "Ціна", class: "form-label" %>
-    <%= f.number_field :price, step: 0.01, class: "form-control", required: true%>
+    <%= f.number_field :price, step: 0.01, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
@@ -27,27 +27,27 @@
 
   <div class="mb-3">
     <%= f.label :part_id, "Деталь", class: "form-label" %>
-    <%= f.select :part_id, @parts.map { |p| [p.name, p.id] }, { include_blank: "Виберіть деталь" }, class: "form-select", onchange: "his.form.submit()" %>
+    <%= f.select :part_id, @parts.map { |p| [p.name, p.id] }, { include_blank: "Виберіть деталь" }, class: "form-select" %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :brand_id, "Марка", class: "form-label" %>
-    <%= f.select :brand_id, @brands.map { |b| [b.name, b.id] }, { include_blank: "Виберіть марку" }, class: "form-select", onchange: "his.form.submit()" %>
+    <%= f.label :brand_ids, "Марки", class: "form-label" %>
+    <%= f.select :brand_ids, options_from_collection_for_select(@brands, :id, :name, @product.brand_ids), {}, multiple: true, class: "form-select" %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :model_id, "Модель", class: "form-label" %>
-    <%= f.select :model_id, @models.map { |m| [m.name, m.id] }, { include_blank: "Виберіть модель" }, class: "form-select", onchange: "his.form.submit()" %>
+    <%= f.label :model_ids, "Моделі", class: "form-label" %>
+    <%= f.select :model_ids, options_from_collection_for_select(@models, :id, :name, @product.model_ids), {}, multiple: true, class: "form-select" %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :model_year_id, "Рік моделі", class: "form-label" %>
-    <%= f.select :model_year_id, @years.map { |y| [y.name, y.id] }, { include_blank: "Виберіть рік моделі" }, class: "form-select", onchange: "his.form.submit()" %>
+    <%= f.label :model_year_ids, "Роки моделей", class: "form-label" %>
+    <%= f.select :model_year_ids, options_from_collection_for_select(@years, :id, :year, @product.model_year_ids), {}, multiple: true, class: "form-select" %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :engine_id, "Двигун", class: "form-label" %>
-    <%= f.select :engine_id, @engines.map { |e| [e.name, e.id] }, { include_blank: "Виберіть двигун" }, class: "form-select", onchange: "his.form.submit()" %>
+    <%= f.label :engine_ids, "Двигуни", class: "form-label" %>
+    <%= f.select :engine_ids, options_from_collection_for_select(@engines, :id, :name, @product.engine_ids), {}, multiple: true, class: "form-select" %>
   </div>
 
   <div class="mb-3">
@@ -56,8 +56,13 @@
   </div>
 
   <div class="mb-3">
+    <%= f.label :stock, "Кількість на складі", class: "form-label" %>
+    <%= f.number_field :stock, class: "form-control", required: true, min: 0 %>
+  </div>
+
+  <div class="mb-3">
     <%= f.submit "Зберегти", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<%= link_to 'Назад', admin_products_path, class: "btn btn-secondary mt-4" %>
+<%= link_to 'Назад', products_path, class: "btn btn-secondary mt-4" %>

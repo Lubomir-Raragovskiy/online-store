@@ -1,4 +1,6 @@
-class Admin::ProductsController < Admin::SessionController
+class Admin::ProductsController < ProductsController
+  before_action :authenticate_user!
+  before_action :authorize_admin!
   before_action :set_product, only: [ :edit, :update, :destroy ]
   before_action :load_dependencies, only: [ :new, :edit, :create, :update ]
 
@@ -6,20 +8,25 @@ class Admin::ProductsController < Admin::SessionController
     @product = Product.new
   end
 
-  def edit; end
+  def edit
+    @product_characteristics = @product.part ? @product.part.characteristics : []
+  end
 
   def create
     @product = Product.new(product_params)
     if @product.save
-      redirect_to admin_product_path(@product), notice: "Product was successfully created."
+      save_characteristics(@product)
+      render :edit
     else
       render :new
     end
   end
 
   def update
+    @product_characteristics = @product.part ? @product.part.characteristics : []
     if @product.update(product_params)
-      redirect_to admin_product_path(@product), notice: "Product was successfully updated."
+      save_characteristics(@product)
+      render :edit, notice: "Product was successfully updated."
     else
       render :edit
     end
@@ -40,13 +47,25 @@ class Admin::ProductsController < Admin::SessionController
     params.require(:product).permit(
       :name,
       :description,
-      :image,
       :price,
       :stock,
+      :image,
       :part_id,
-      :brand_id,
-      :model_year_id,
-      :engine_id
+      brand_ids: [], model_ids: [], engine_ids: [], model_year_ids: [],
     )
+  end
+
+
+  def load_dependencies
+    @parts = Part.all
+    @brands = Brand.all
+    @models = Model.all
+    @engines = Engine.all
+    @years = ModelYear.all
+    @characteristics = @product.part ? @product.part.characteristics : []  # Характеристики деталі
+  end
+
+  def authorize_admin!
+    redirect_to root_path, alert: "Access denied!" unless current_user&.admin?
   end
 end
