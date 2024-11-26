@@ -9,9 +9,8 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @characteristics = @product.part.characteristics.distinct
   end
-
-  private
 
   def load_dependencies
     @parts = Part.all
@@ -25,6 +24,10 @@ class ProductsController < ApplicationController
     @characteristics = @selected_part ? @selected_part.characteristics.distinct : []
     @characteristic_values = params[:characteristic_id].present? ? Characteristic.where(id: params[:characteristic_id]).pluck(:value).uniq : []
   end
+
+
+
+  private
 
   def filter_products(products)
     # Фільтр за брендом

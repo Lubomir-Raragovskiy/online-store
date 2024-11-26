@@ -1,10 +1,39 @@
 <h1><%= @product.name %></h1>
 
+<!-- Зображення товару -->
+<% if @product.image.attached? %>
+  <div class="product-image">
+    <%= image_tag @product.image, class: "img-fluid", alt: @product.name %>
+  </div>
+<% else %>
+  <p><em>Зображення недоступне</em></p>
+<% end %>
+
 <p><strong>Опис:</strong> <%= @product.description %></p>
 <p><strong>Ціна:</strong> <%= number_to_currency(@product.price, unit: "грн", format: "%n %u") %></p>
 <p><strong>В наявності:</strong> <%= @product.stock %> шт.</p>
 
-<%= link_to 'Назад до каталогу', products_path, class: "btn btn-secondary" %>
+<% if @characteristics.present? %>
+  <div class="characteristics">
+    <h3>Характеристики:</h3>
+    <ul>
+      <% @characteristics.each do |characteristic| %>
+        <li><strong><%= characteristic.name %>:</strong> <%= characteristic.value %></li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <p><em>Характеристики недоступні</em></p>
+<% end %>
+
+
+<% if @product.stock > 0 %>
+                <%= button_to 'Додати в кошик', add_to_cart_path(product_id: @product.id), method: :post, class: "btn btn-primary w-100" %>
+              <% else %>
+                <p class="text-danger text-center">Немає в наявності</p>
+              <% end %>
+
+<%= link_to 'Назад до каталогу', products_path, class: "btn btn-secondary w-100" %>
 
 <!-- Відгуки -->
 <div class="reviews">
