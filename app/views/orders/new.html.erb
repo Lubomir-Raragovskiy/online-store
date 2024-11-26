@@ -1,4 +1,6 @@
-<%= form_with model: @order, local: true do |f| %>
+<h1>Оформлення замовлення</h1>
+
+<%= form_with model: @order, local: true, id: "order-form" do |f| %>
 
   <!-- Персональні дані -->
   <div class="form-group">
@@ -113,8 +115,17 @@
     </div>
   <% end %>
 
-  <!-- Кнопка надсилання -->
   <div class="form-group">
-    <%= f.submit "Оформити замовлення", class: "btn btn-primary" %>
-  </div>
+  <button type="button" class="btn btn-primary" onclick="setFromButtonValue()">Оформити замовлення</button>
+</div>
+
+  <%= f.hidden_field :from_button, id: "from_button", value: false %>
 <% end %>
+
+
+<script type="text/javascript">
+  function setFromButtonValue() {
+    document.getElementById('from_button').value = true;
+    document.getElementById('order-form').submit();
+  }
+</script>

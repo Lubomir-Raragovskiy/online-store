@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :reviews, only: [ :create, :destroy ]
     get :characteristics, on: :collection
   end
-  resources :orders, only: [ :new, :create, :show ]
+  resources :orders, only: [ :new, :create, :index ]
 
   resources :orders do
     resource :address, only: [ :new, :create ]

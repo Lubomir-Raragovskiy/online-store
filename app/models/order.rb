@@ -14,5 +14,5 @@ class Order < ApplicationRecord
 
   accepts_nested_attributes_for :address
 
-  attr_accessor :card_number, :card_expiry_month, :card_expiry_year, :card_cvc
+  attr_accessor :card_number, :card_expiry_month, :card_expiry_year, :card_cvc, :from_button
 end

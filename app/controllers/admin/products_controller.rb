@@ -62,7 +62,6 @@ class Admin::ProductsController < ProductsController
     @models = Model.all
     @engines = Engine.all
     @years = ModelYear.all
-    @characteristics = @product.part ? @product.part.characteristics : []  # Характеристики деталі
   end
 
   def authorize_admin!

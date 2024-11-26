@@ -9,7 +9,10 @@ class OrdersController < ApplicationController
   def create
     @order = current_user ? current_user.orders.build(order_params) : Order.new(order_params)
 
-    # Додаємо продукти з кошика в замовлення
+    unless params.dig(:order, :from_button) == "true"
+      render :new and return
+    end
+
     (session[:cart] || []).each do |product_id|
       product = Product.find(product_id)
       @order.order_items.build(product: product, quantity: 1, price: product.price)
@@ -30,7 +33,7 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    permitted = [ :name, :email, :phone, :payment_method,
+    permitted = [ :name, :email, :phone, :payment_method, :from_button,
                  { address_attributes: [ :region, :district, :settlement, :post_office ] } ]
     if params[:order][:payment_method] == "card"
       permitted += [ :card_number, :card_expiry_month, :card_expiry_year, :card_cvc ]

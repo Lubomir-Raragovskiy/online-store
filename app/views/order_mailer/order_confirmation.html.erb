@@ -7,4 +7,4 @@
     <li><%= item.product.name %> - <%= item.quantity %> шт. за <%= number_to_currency(item.price) %></li>
   <% end %>
 </ul>
-<p>Сума: <%= number_to_currency(@order.total_price) %></p>
+<p>Сума: <%= number_to_currency(@order.total_price_cents) %></p>
