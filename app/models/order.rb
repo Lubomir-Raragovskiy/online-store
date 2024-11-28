@@ -4,7 +4,7 @@ class Order < ApplicationRecord
   has_many :products, through: :order_items
 
   validates :name, :email, :phone, presence: true, unless: -> { user.present? }
-  has_one :address
+  has_one :address, dependent: :destroy
 
   validates :payment_method, inclusion: { in: %w[card cash], message: "Недійсний спосіб оплати" }
 

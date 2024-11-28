@@ -18,6 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 gem "devise"
+gem "devise-security"
 gem "ffi", "~> 1.16.3"
 gem "dartsass-sprockets"
 gem "bootstrap"
@@ -28,6 +29,7 @@ gem "select2-rails"
 gem "kaminari"
 gem "httparty"
 gem "cocoon"
+gem "activemerchant"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
@@ -72,5 +74,3 @@ group :test do
 end
 
 gem "cssbundling-rails", "~> 1.4"
-
-gem "stripe", "~> 13.2"

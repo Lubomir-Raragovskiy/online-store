@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   end
   resources :reviews, only: [ :index ]
 
-  resources :orders, only: [ :new, :create, :index ]
+  resources :orders, only: [ :new, :create ]
 
   resources :orders do
     resource :address, only: [ :new, :create ]
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :dashboard, only: [ :index ]
     resources :users, only: [ :index, :show, :new, :create, :edit, :update, :destroy  ]
-    resources :orders, only: [ :index ]
+    resources :orders, only: [ :index, :destroy ]
     resources :products, only: [ :new, :create, :edit, :update, :destroy ]
     resources :brands, except: [ :show ]
     resources :models, except: [ :show ] do
