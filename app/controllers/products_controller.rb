@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
     load_dependencies
     @products = @q.result(distinct: true)
     @products = filter_products(@products)
-    @products = @products.page(params[:page]).per(10)
+    @products = @products.page(params[:page]).per(9)
   end
 
   def show

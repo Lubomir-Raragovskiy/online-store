@@ -1,0 +1,36 @@
+<!-- app/views/contact/new.html.erb -->
+<h1>Зв'яжіться з нами</h1>
+<p>Не соромтесь звертатися до нас. Ми завжди раді допомогти!</p>
+
+<%= form_with(model: @contact, url: contact_path, local: true) do |f| %>
+  <div class="form-group">
+    <%= f.label :name, "Ваше ім'я" %>
+    <%= f.text_field :name, class: 'form-control', required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, "Ваша електронна пошта" %>
+    <%= f.email_field :email, class: 'form-control', required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :message, "Повідомлення" %>
+    <%= f.text_area :message, class: 'form-control', rows: 5, required: true %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Відправити", class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success mt-4">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger mt-4">
+    <%= flash[:alert] %>
+  </div>
+<% end %>

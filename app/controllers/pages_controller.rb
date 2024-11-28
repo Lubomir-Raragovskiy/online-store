@@ -1,7 +1,5 @@
 class PagesController < ApplicationController
   def home
-  end
-
-  def contact
+    @featured_products = Product.order(created_at: :desc).limit(3)
   end
 end

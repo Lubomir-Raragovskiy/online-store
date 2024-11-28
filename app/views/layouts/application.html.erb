@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Online Store</title>
+    <title>Інтернет-магазин</title>
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_pack_tag 'application' %>
     <%= csrf_meta_tags %>
@@ -19,55 +19,54 @@
         <%= flash[:alert] %>
       </div>
     <% end %>
+    
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="#">Online Store</a>
+        <%= link_to 'Інтернет-магазин', root_path, class: 'navbar-brand' %>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav ms-auto">
-    <li class="nav-item">
-      <%= link_to 'Home', root_path, class: 'nav-link' %>
-    </li>
-    <li class="nav-item">
-      <%= link_to 'Products', products_path, class: 'nav-link' %>
-    </li>
-    <li class="nav-item">
-      <%= link_to 'Cart', cart_path, class: 'nav-link' %>
-    </li>
-    <li class="nav-item">
-      <%= link_to 'Contact', contact_path, class: 'nav-link' %>
-    </li>
-    <% if user_signed_in? %>
-      <!-- Якщо користувач увійшов -->
-      <li class="nav-item">
-        <%= link_to 'Profile', edit_user_registration_path, class: 'nav-link' %>
-      </li>
-      <li class="nav-item">
-        <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'nav-link' %>
-      </li>
-      <% if current_user.admin? %>
-        <!-- Посилання для адміністратора -->
-        <li class="nav-item">
-          <%= link_to 'Admin Dashboard', admin_dashboard_index_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Manage Users', admin_users_path, class: 'nav-link' %>
-        </li>
-      <% end %>
-    <% else %>
-      <!-- Якщо користувач не увійшов -->
-      <li class="nav-item">
-        <%= link_to 'Sign Up', new_user_registration_path, class: 'nav-link' %>
-      </li>
-      <li class="nav-item">
-        <%= link_to 'Login', new_user_session_path, class: 'nav-link' %>
-      </li>
-    <% end %>
-  </ul>
-</div>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <%= link_to 'Назад', request.referer || root_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Товари', products_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Кошик', cart_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Зв\'яжіться з нами', contact_path, class: 'nav-link' %>
+            </li>
+            <% if user_signed_in? %>
+              <!-- Якщо користувач увійшов -->
+              <li class="nav-item">
+                <%= link_to 'Профіль', edit_user_registration_path, class: 'nav-link' %>
+              </li>
+              <li class="nav-item">
+                <%= link_to 'Вийти', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+              </li>
+              <% if current_user.admin? %>
+                <!-- Посилання для адміністратора -->
+                <li class="nav-item">
+                  <%= link_to 'Адміністративна панель', admin_dashboard_index_path, class: 'nav-link' %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to 'Управління користувачами', admin_users_path, class: 'nav-link' %>
+                </li>
+              <% end %>
+            <% else %>
+              <!-- Якщо користувач не увійшов -->
+              <li class="nav-item">
+                <%= link_to 'Зареєструватися', new_user_registration_path, class: 'nav-link' %>
+              </li>
+              <li class="nav-item">
+                <%= link_to 'Увійти', new_user_session_path, class: 'nav-link' %>
+              </li>
+            <% end %>
           </ul>
         </div>
       </div>
@@ -80,7 +79,7 @@
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3">
-      <p class="mb-0">&copy; <%= Date.today.year %> Online Store. All rights reserved.</p>
+      <p class="mb-0">&copy; <%= Date.today.year %> Інтернет-магазин. Всі права захищені.</p>
     </footer>
   </body>
 </html>
