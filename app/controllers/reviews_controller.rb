@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :set_product
+  before_action :set_product, except: [ :index ]
   before_action :authenticate_user!, only: [ :create, :destroy ]
 
   def create
@@ -21,6 +21,14 @@ class ReviewsController < ApplicationController
     else
       redirect_to @product, alert: "Ви не можете видалити цей відгук."
     end
+  end
+
+  def index
+    authenticate_user!
+    unless current_user&.admin?
+      redirect_to root_path, alert: "У вас немає доступу до цієї сторінки."
+    end
+    @reviews = Review.includes(:product, :user).order(created_at: :desc)
   end
 
   private

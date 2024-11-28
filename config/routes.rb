@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     resources :reviews, only: [ :create, :destroy ]
     get :characteristics, on: :collection
   end
+  resources :reviews, only: [ :index ]
+
   resources :orders, only: [ :new, :create, :index ]
 
   resources :orders do
