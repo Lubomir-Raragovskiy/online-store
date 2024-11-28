@@ -18,17 +18,37 @@ class OrdersController < ApplicationController
       @order.order_items.build(product: product, quantity: 1, price: product.price)
     end
 
-    if @order.save
-      session[:cart] = [] # Очищуємо кошик
+    if @order.valid?
+      # Отримання даних кредитної картки
+      credit_card = ActiveMerchant::Billing::CreditCard.new(
+        number: params[:order][:card_number],
+        month: params[:order][:card_expiry_year],
+        year: "20#{params[:order][:card_expiry_month]}",
+        verification_value: params[:order][:card_verification],
+      )
 
-      # Надсилаємо підтвердження замовлення
-      OrderMailer.order_confirmation(@order).deliver_now
+      if credit_card.valid?
+        # Створення транзакції
+        response = STRIPE_GATEWAY.purchase(@order.total_price * 100, credit_card)
 
-      redirect_to @order, notice: "Замовлення успішно оформлено! Перевірте вашу електронну пошту."
+        if response.success?
+          @order.update(payment_status: "paid", transaction_id: response.authorization)
+          session[:cart] = []
+          OrderMailer.order_confirmation(@order).deliver_now
+          redirect_to products_path, notice: "Замовлення успішно оформлено! Перевірте вашу електронну пошту."
+        else
+          flash[:alert] = "Помилка оплати: #{response.message}"
+          render :new
+        end
+      else
+        flash[:alert] = "Некоректні дані картки. Будь ласка, перевірте введену інформацію."
+        render :new
+      end
     else
       render :new
     end
   end
+
 
   private
 
