@@ -15,8 +15,7 @@ class Admin::ProductsController < ProductsController
   def create
     @product = Product.new(product_params)
     if @product.save
-      save_characteristics(@product)
-      render :edit
+      redirect_to products_path
     else
       render :new
     end
@@ -25,16 +24,15 @@ class Admin::ProductsController < ProductsController
   def update
     @product_characteristics = @product.part ? @product.part.characteristics : []
     if @product.update(product_params)
-      save_characteristics(@product)
       render :edit, notice: "Product was successfully updated."
     else
-      render :edit
+      redirect_to products_path
     end
   end
 
   def destroy
     @product.destroy
-    redirect_to admin_products_path, notice: "Product was successfully deleted."
+    redirect_to products_path, notice: "Product was successfully deleted."
   end
 
   private
@@ -61,7 +59,8 @@ class Admin::ProductsController < ProductsController
     @brands = Brand.all
     @models = Model.all
     @engines = Engine.all
-    @years = ModelYear.all
+    @years = Year.all
+    @model_years = ModelYear.all
   end
 
   def authorize_admin!

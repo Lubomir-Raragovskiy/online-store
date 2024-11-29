@@ -41,10 +41,13 @@
   </div>
 
   <div class="mb-3">
-    <%= f.label :model_year_ids, "Роки моделей", class: "form-label" %>
-    <%= f.select :model_year_ids, options_from_collection_for_select(@years, :id, :year, @product.model_year_ids), {}, multiple: true, class: "form-select" %>
-  </div>
-
+  <%= f.label :model_year_ids, "Роки моделей", class: "form-label" %>
+  <%= f.select :model_year_ids, 
+               @years.map { |year| [year.year, year.id] }, 
+               {}, 
+               multiple: true, 
+               class: "form-select" %>
+</div>
   <div class="mb-3">
     <%= f.label :engine_ids, "Двигуни", class: "form-label" %>
     <%= f.select :engine_ids, options_from_collection_for_select(@engines, :id, :name, @product.engine_ids), {}, multiple: true, class: "form-select" %>

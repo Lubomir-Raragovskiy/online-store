@@ -30,6 +30,7 @@ gem "kaminari"
 gem "httparty"
 gem "cocoon"
 gem "activemerchant"
+gem "image_processing"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

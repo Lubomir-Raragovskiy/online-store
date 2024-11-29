@@ -1,3 +1,18 @@
+User.create!(
+  email: "user1@example.com",
+  password: "password123",
+  password_confirmation: "password123",
+  role: "user"
+)
+
+User.create!(
+  email: "admin@example.com",
+  password: "password123",
+  password_confirmation: "password123",
+  role: "admin"
+)
+
+
 # Створення брендів
 toyota = Brand.create!(name: 'Toyota')
 ford = Brand.create!(name: 'Ford')
