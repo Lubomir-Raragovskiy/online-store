@@ -20,7 +20,7 @@
             <div class="card-body">
               <h5 class="card-title"><%= product.name %></h5>
               <p class="card-text"><%= product.description %></p>
-              <p class="card-text"><strong>$<%= product.price %></strong></p>
+              <p class="card-text"><strong><%= product.price %> грн</strong></p>
               <%= link_to 'Детальніше', product_path(product), class: 'btn btn-outline-primary' %>
             </div>
           </div>
