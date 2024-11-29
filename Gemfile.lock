@@ -134,7 +134,12 @@ GEM
     error_highlight (0.6.0)
     erubi (1.13.0)
     execjs (2.10.0)
-    ffi (1.16.3)
+    ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-arm-linux-gnu)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86-linux-gnu)
+    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0-x86_64-linux-gnu)
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (4.28.3)
@@ -411,7 +416,7 @@ DEPENDENCIES
   devise
   devise-security
   error_highlight (>= 0.4.0)
-  ffi (~> 1.16.3)
+  ffi (~> 1.17.0)
   httparty
   image_processing
   importmap-rails

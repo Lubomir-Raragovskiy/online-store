@@ -19,7 +19,7 @@ gem "jbuilder"
 
 gem "devise"
 gem "devise-security"
-gem "ffi", "~> 1.16.3"
+gem "ffi", "~> 1.17.0"
 gem "dartsass-sprockets"
 gem "bootstrap"
 gem "jquery-rails"
