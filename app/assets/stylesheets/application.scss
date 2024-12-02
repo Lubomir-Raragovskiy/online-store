@@ -15,8 +15,7 @@
  *= require_tree .
  *= require_self
  */
-@import "bootstrap";
-@import "products";
+@use "products";
 
 :root {
   --primary-color: #007bff;
