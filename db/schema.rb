@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_29_070005) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_04_225224) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -65,9 +65,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_070005) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "characteristic_values", force: :cascade do |t|
+    t.string "value"
+    t.integer "characteristic_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["characteristic_id"], name: "index_characteristic_values_on_characteristic_id"
+  end
+
   create_table "characteristics", force: :cascade do |t|
     t.string "name", null: false
-    t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -177,6 +184,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_070005) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "product_characteristic_values", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "characteristic_value_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["characteristic_value_id"], name: "index_product_characteristic_values_on_characteristic_value_id"
+    t.index ["product_id"], name: "index_product_characteristic_values_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -226,6 +242,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_070005) do
   add_foreign_key "addresses", "orders"
   add_foreign_key "brand_products", "brands"
   add_foreign_key "brand_products", "products"
+  add_foreign_key "characteristic_values", "characteristics"
   add_foreign_key "engine_products", "engines"
   add_foreign_key "engine_products", "products"
   add_foreign_key "model_products", "models"
@@ -242,6 +259,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_070005) do
   add_foreign_key "orders", "users"
   add_foreign_key "part_characteristics", "characteristics"
   add_foreign_key "part_characteristics", "parts"
+  add_foreign_key "product_characteristic_values", "characteristic_values"
+  add_foreign_key "product_characteristic_values", "products"
   add_foreign_key "products", "parts"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"

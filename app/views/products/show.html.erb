@@ -13,12 +13,16 @@
 <p><strong>Ціна:</strong> <%= number_to_currency(@product.price, unit: "грн", format: "%n %u") %></p>
 <p><strong>В наявності:</strong> <%= @product.stock %> шт.</p>
 
-<% if @characteristics.present? %>
+<!-- Характеристики -->
+<% if @product.product_characteristic_values.present? %>
   <div class="characteristics">
     <h3>Характеристики:</h3>
     <ul>
-      <% @characteristics.each do |characteristic| %>
-        <li><strong><%= characteristic.name %>:</strong> <%= characteristic.value %></li>
+      <% @product.product_characteristic_values.each do |pcv| %>
+        <li>
+          <strong><%= pcv.characteristic_value.characteristic.name %>:</strong>
+          <%= pcv.characteristic_value.value %>
+        </li>
       <% end %>
     </ul>
   </div>
@@ -26,12 +30,12 @@
   <p><em>Характеристики недоступні</em></p>
 <% end %>
 
-
+<!-- Кнопка "Додати в кошик" -->
 <% if @product.stock > 0 %>
-                <%= button_to 'Додати в кошик', add_to_cart_path(product_id: @product.id), method: :post, class: "btn btn-primary w-100" %>
-              <% else %>
-                <p class="text-danger text-center">Немає в наявності</p>
-              <% end %>
+  <%= button_to 'Додати в кошик', add_to_cart_path(product_id: @product.id), method: :post, class: "btn btn-primary w-100" %>
+<% else %>
+  <p class="text-danger text-center">Немає в наявності</p>
+<% end %>
 
 <%= link_to 'Назад до каталогу', products_path, class: "btn btn-secondary w-100" %>
 

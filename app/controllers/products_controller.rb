@@ -22,7 +22,7 @@ class ProductsController < ApplicationController
     @selected_part = params[:part_id].present? ? Part.find_by(id: params[:part_id]) : nil
 
     @characteristics = @selected_part ? @selected_part.characteristics.distinct : []
-    @characteristic_values = params[:characteristic_id].present? ? Characteristic.where(id: params[:characteristic_id]).pluck(:value).uniq : []
+    @characteristic_values = params[:characteristic_id].present? ? CharacteristicValue.where(characteristic_id: params[:characteristic_id]).pluck(:value).uniq : []
   end
 
 
@@ -37,7 +37,7 @@ class ProductsController < ApplicationController
     products = products.by_model(params[:model_id]) if params[:model_id].present?
 
     # Фільтр за роком
-    products = products.joins(models: { model_years: :year }).where(years: { id: params[:year_id] }) if params[:year_id].present?
+    products = products.by_year(params[:year_id]) if params[:year_id].present?
 
     # Фільтр за двигуном
     products = products.by_engine(params[:engine_id]) if params[:engine_id].present?
@@ -48,7 +48,7 @@ class ProductsController < ApplicationController
     # Фільтр за характеристиками
     if params[:characteristics].present?
       params[:characteristics].each do |characteristic_id, value|
-        products = products.by_characteristic(characteristic_id, value) if value.present?
+        products = products.by_characteristic_value(characteristic_id, value) if value.present?
       end
     end
 
