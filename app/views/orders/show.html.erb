@@ -1,2 +1,45 @@
-<h1>Orders#show</h1>
-<p>Find me in app/views/orders/show.html.erb</p>
+<h1>Деталі замовлення № <%= @order.id %></h1>
+
+<p>
+  <strong>Клієнт:</strong>
+  <%= @order.name %>
+</p>
+
+<p>
+  <strong>Електронна пошта:</strong>
+  <%= @order.email %>
+</p>
+
+<p>
+  <strong>Телефон:</strong>
+  <%= @order.phone %>
+</p>
+
+<p>
+  <strong>Сума:</strong>
+  <%= number_to_currency(@order.total_price_cents) %>
+</p>
+
+<p>
+  <strong>Метод оплати:</strong>
+  <%= @order.payment_method.capitalize %>
+</p>
+
+<h3>Адреса доставки:</h3>
+<p>
+  <strong>Регіон:</strong> <%= @order.address.region %><br>
+  <strong>Район:</strong> <%= @order.address.district %><br>
+  <strong>Населений пункт:</strong> <%= @order.address.settlement %><br>
+  <strong>Поштове відділення:</strong> <%= @order.address.post_office %>
+</p>
+
+<h3>Товари в замовленні:</h3>
+<ul>
+  <% @order.order_items.each do |item| %>
+    <li>
+      <%= item.product.name %> - <%= item.quantity %> шт. за <%= number_to_currency(item.price) %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Повернутися до каталогу товарів', products_path, class: "btn btn-secondary mt-4"  %>

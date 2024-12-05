@@ -3,59 +3,57 @@
 <%= form_with model: @order, local: true, id: "order-form" do |f| %>
 
   <!-- Персональні дані -->
-  <div class="form-group">
-    <%= f.label :name, "Ім'я" %>
-    <%= f.text_field :name, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :email, "Електронна пошта" %>
-    <%= f.email_field :email, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :phone, "Телефон" %>
-    <%= f.telephone_field :phone, class: "form-control" %>
-  </div>
-
-  <!-- Адреса -->
-  <fieldset>
-    <h3>Адреса</h3>
-
-    <%= f.fields_for :address do |address_fields| %>
-      <div class="form-group">
-        <%= address_fields.label :region, "Область" %>
-        <%= address_fields.select :region,
-                                  options_for_select(@regions.map { |r| [r["name_uk"], r["uuid"]] }, selected: params.dig(:order, :address_attributes, :region)),
-                                  { prompt: "Виберіть область" },
-                                  { class: "form-select", onchange: "this.form.submit();" } %>
-      </div>
-
-      <div class="form-group">
-        <%= address_fields.label :district, "Район" %>
-        <%= address_fields.select :district,
-                                  options_for_select(@districts.map { |d| [d["name_uk"], d["uuid"]] }, selected: params.dig(:order, :address_attributes, :district)),
-                                  { prompt: "Виберіть район" },
-                                  { class: "form-select", onchange: "this.form.submit();" } %>
-      </div>
-
-      <div class="form-group">
-        <%= address_fields.label :settlement, "Населений пункт" %>
-        <%= address_fields.select :settlement,
-                                  options_for_select(@settlements.map { |s| [s["name_uk"], s["uuid"]] }, selected: params.dig(:order, :address_attributes, :settlement)),
-                                  { prompt: "Виберіть населений пункт" },
-                                  { class: "form-select", onchange: "this.form.submit();" } %>
-      </div>
-
-      <div class="form-group">
-  <%= address_fields.label :post_office, "Поштове відділення" %>
-  <%= address_fields.select :post_office,
-                            options_for_select(@post_offices.map { |p| [p[:label], p[:uuid]] }, selected: params.dig(:order, :address_attributes, :post_office)),
-                            { prompt: "Виберіть поштове відділення" },
-                            { class: "form-select" } %>
+ <div class="form-group">
+  <%= f.label :name, "Ім'я" %>
+  <%= f.text_field :name, class: "form-control", required: true %>
 </div>
-    <% end %>
-  </fieldset>
+
+<div class="form-group">
+  <%= f.label :email, "Електронна пошта" %>
+  <%= f.email_field :email, class: "form-control", required: true %>
+</div>
+
+<div class="form-group">
+  <%= f.label :phone, "Телефон" %>
+  <%= f.telephone_field :phone, class: "form-control", required: true %>
+</div>
+ <fieldset>
+  <h3>Адреса</h3>
+
+  <%= f.fields_for :address do |address_fields| %>
+    <div class="form-group">
+      <%= address_fields.label :region, "Область" %>
+      <%= address_fields.select :region,
+                                options_for_select(@regions.map { |r| [r["name_uk"], r["uuid"]] }, selected: params.dig(:order, :address_attributes, :region)),
+                                { prompt: "Виберіть область" },
+                                { class: "form-select", required: true, onchange: "this.form.submit();" } %>
+    </div>
+
+    <div class="form-group">
+      <%= address_fields.label :district, "Район" %>
+      <%= address_fields.select :district,
+                                options_for_select(@districts.map { |d| [d["name_uk"], d["uuid"]] }, selected: params.dig(:order, :address_attributes, :district)),
+                                { prompt: "Виберіть район" },
+                                { class: "form-select", required: true, onchange: "this.form.submit();" } %>
+    </div>
+
+    <div class="form-group">
+      <%= address_fields.label :settlement, "Населений пункт" %>
+      <%= address_fields.select :settlement,
+                                options_for_select(@settlements.map { |s| [s["name_uk"], s["uuid"]] }, selected: params.dig(:order, :address_attributes, :settlement)),
+                                { prompt: "Виберіть населений пункт" },
+                                { class: "form-select", required: true, onchange: "this.form.submit();" } %>
+    </div>
+
+    <div class="form-group">
+      <%= address_fields.label :post_office, "Поштове відділення" %>
+      <%= address_fields.select :post_office,
+                                options_for_select(@post_offices.map { |p| [p[:label], p[:uuid]] }, selected: params.dig(:order, :address_attributes, :post_office)),
+                                { prompt: "Виберіть поштове відділення" },
+                                { class: "form-select", required: true } %>
+    </div>
+  <% end %>
+</fieldset>
 
   <!-- Спосіб оплати -->
   <h3>Спосіб оплати</h3>

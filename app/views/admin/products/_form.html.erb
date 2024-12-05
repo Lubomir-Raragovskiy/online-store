@@ -27,7 +27,8 @@
 
   <div class="mb-3">
     <%= f.label :part_id, "Деталь", class: "form-label" %>
-    <%= f.select :part_id, @parts.map { |p| [p.name, p.id] }, { include_blank: "Виберіть деталь" }, class: "form-select" %>
+    <%= f.select :part_id, @parts.map { |p| [p.name, p.id] }, { include_blank: "Виберіть деталь" }, 
+                 class: "form-select", onchange: "this.form.submit();" %>
   </div>
 
   <div class="mb-3">
@@ -41,13 +42,14 @@
   </div>
 
   <div class="mb-3">
-  <%= f.label :model_year_ids, "Роки моделей", class: "form-label" %>
-  <%= f.select :model_year_ids, 
-               @years.map { |year| [year.year, year.id] }, 
-               {}, 
-               multiple: true, 
-               class: "form-select" %>
-</div>
+    <%= f.label :model_year_ids, "Роки моделей", class: "form-label" %>
+    <%= f.select :model_year_ids, 
+                 @years.map { |year| [year.year, year.id] }, 
+                 {}, 
+                 multiple: true, 
+                 class: "form-select" %>
+  </div>
+
   <div class="mb-3">
     <%= f.label :engine_ids, "Двигуни", class: "form-label" %>
     <%= f.select :engine_ids, options_from_collection_for_select(@engines, :id, :name, @product.engine_ids), {}, multiple: true, class: "form-select" %>
@@ -62,6 +64,21 @@
     <%= f.label :stock, "Кількість на складі", class: "form-label" %>
     <%= f.number_field :stock, class: "form-control", required: true, min: 0 %>
   </div>
+
+  <% if @product_characteristics.present? %>
+    <div class="mb-3">
+      <h5>Характеристики</h5>
+      <% @product_characteristics.each do |characteristic| %>
+        <div class="mb-2">
+          <%= label_tag "product[characteristic_values][]", characteristic.name, class: "form-label" %>
+          <%= select_tag "product[characteristic_values][]", 
+                         options_from_collection_for_select(characteristic.characteristic_values, :id, :value, @product.characteristic_values.map(&:id)),
+                         include_blank: "Оберіть #{characteristic.name.downcase}", 
+                         class: "form-select" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="mb-3">
     <%= f.submit "Зберегти", class: "btn btn-primary" %>

@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   end
   resources :reviews, only: [ :index ]
 
-  resources :orders, only: [ :new, :create ]
+  resources :orders, only: [ :new, :create, :show ]
 
   resources :orders do
     resource :address, only: [ :new, :create ]

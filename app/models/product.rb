@@ -8,7 +8,7 @@ class Product < ApplicationRecord
   has_many :engine_products, dependent: :destroy
   has_many :engines, through: :engine_products
   has_many :reviews, dependent: :destroy
-  has_many :product_characteristic_values
+  has_many :product_characteristic_values, dependent: :destroy
   has_many :characteristic_values, through: :product_characteristic_values
   has_many :model_year_products, dependent: :destroy
   has_many :model_years, through: :model_year_products

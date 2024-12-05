@@ -16,6 +16,8 @@ class OrdersController < ApplicationController
     (session[:cart] || []).each do |product_id|
       product = Product.find(product_id)
       @order.order_items.build(product: product, quantity: 1, price: product.price)
+      product.stock -=1
+      product.save
     end
 
     if @order.save
@@ -24,11 +26,16 @@ class OrdersController < ApplicationController
       # Надсилаємо підтвердження замовлення
       OrderMailer.order_confirmation(@order).deliver_now
 
-      redirect_to products_path, notice: "Замовлення успішно оформлено! Перевірте вашу електронну пошту."
+      redirect_to order_path(@order), notice: "Замовлення успішно оформлено! Перевірте вашу електронну пошту."
     else
       render :new
     end
   end
+
+  def show
+    @order = Order.find(params[:id])
+  end
+
 
   private
 
