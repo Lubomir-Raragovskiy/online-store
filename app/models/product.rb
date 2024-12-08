@@ -40,15 +40,26 @@ class Product < ApplicationRecord
     %w[brands models engines characteristic_values]
   end
 
+  before_update :clear_associations
+
   after_save :associate_with_models_from_brands
+
 
   private
 
+  def clear_associations
+    models.clear
+    brands.clear
+    engines.clear
+    model_years.clear
+  end
+
   def associate_with_models_from_brands
-    brands.each do |brand|
-      brand.models.each do |model|
-        ModelProduct.find_or_create_by!(model: model, product: self)
-      end
+    brand_models = brands.flat_map(&:models).uniq
+    existing_models = models
+
+    (brand_models - existing_models).each do |model|
+      models << model
     end
   end
 end

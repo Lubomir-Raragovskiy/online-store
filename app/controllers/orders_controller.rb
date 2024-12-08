@@ -4,6 +4,10 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
     @order.build_address
+
+    if user_signed_in?
+      @order.email = current_user.email
+    end
   end
 
   def create

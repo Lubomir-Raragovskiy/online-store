@@ -28,7 +28,7 @@ class Admin::ProductsController < ProductsController
     @product_characteristics = @product.part&.characteristics || []
     if @product.update(product_params.except(:characteristic_values))
       update_characteristics
-      redirect_to productS_path, notice: "Продукт успішно оновлений."
+      redirect_to products_path, notice: "Продукт успішно оновлений."
     else
       render :edit
     end
