@@ -34,6 +34,7 @@ Rails.application.routes.draw do
         resources :engines, except: [ :show ]
       end
     end
+    resources :contacts, only: [ :index ]
   end
 
   get "cart", to: "cart#show"
