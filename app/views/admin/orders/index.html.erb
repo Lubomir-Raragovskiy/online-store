@@ -18,7 +18,8 @@
         <td><%= number_to_currency(order.total_price_cents) %></td>
         <td><%= l(order.created_at, format: :long) %></td>
         <td>
-          <%= button_to 'Видалити', admin_order_path(order), method: :delete, data: { confirm: 'Ви впевнені?' }, class: 'btn btn-danger' %>
+          <%= link_to 'Переглянути', order_path(order), class: 'btn' %>
+          <%= button_to 'Видалити', admin_order_path(order), method: :delete, data: { confirm: 'Ви впевнені?' }, class: 'btn' %>
         </td>
       </tr>
     <% end %>
